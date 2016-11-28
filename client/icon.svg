@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+	<rect x="0" y="0" width="100" height="100" rx="25" fill="#f33" opacity="1" />
+	<defs>
+		<mask id="shadow">
+			<rect x="0" y="0" width="100" height="100" rx="25" fill="#fff" />
+			<rect x="0" y="0" width="100" height="95" rx="25" fill="#000" />
+		</mask>
+	</defs>
+	<g mask="url(#corners)">
+		<rect mask="url(#shadow)" x="0" y="75" width="100" height="25" fill="#000" opacity="0.2" />
+	</g>
+</svg>
