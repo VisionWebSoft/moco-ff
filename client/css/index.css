@@ -1,0 +1,120 @@
+/*base*/
+dl {
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+}
+dd {
+	-webkit-margin-start: 0;
+}
+html,
+body,
+main {
+	font-family: sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+body {
+	display: flex;
+}
+/*layout*/
+header {
+	height: 3rem;
+}
+.table {
+	height: calc(100% - 3rem);
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 100%;
+}
+.col {
+	display: flex;
+	margin: 0.5rem;
+	
+}
+.row {
+	display: flex;
+	flex-wrap:wrap;
+	width: 100%;
+}
+input::-webkit-input-placeholder {
+	text-indent: 0.5rem;
+}
+/*module*/
+header
+{
+	background-color: #5e8d46;
+}
+.search {
+	border: 0;
+	height: 100%;
+	padding: 0;
+	width: calc(100% - 2rem);
+}
+.sort-toggle-button {
+	display: none;
+}
+.sort-toggle-label {
+	background-color: #45742D;
+	background-image: url(../imgs/-.svg);
+	background-size: 100% 100%;
+	height: 100%;
+	width: 2rem;
+}
+.table dt {
+	background: #45742D;
+	box-sizing: border-box;
+	color: #fff;
+	padding: 0.2rem 0.5rem;
+}
+.table dd.row:nth-of-type(2n+1) {
+	background: #eee;
+}
+.table dd.row:nth-of-type(4n) {
+	/*Is this useful?!! Rationale: the eye can only count to four, these lines help break up the chunks so that rows are easier to distinguish. More info at: https://www.youtube.com/watch?v=z4ikTCTAAHU&index=15&list=PL322BE87D5C05D1E9*/
+	border-bottom: 0.1rem solid #222;
+}
+/*state*/
+::selection {
+	background: #f93;
+}
+::-moz-selection {/*remove if not using FF!!*/
+	background: #f93;
+}
+.sort-toggle-button:checked~.sort-toggle-label {
+	background-image: url(../imgs/down.svg);
+}
+/*small*/
+.table {
+	height: calc(100% - 9rem);
+}
+header {
+	height: 9rem;
+}
+.col {
+	width: calc(50% - 1rem);
+}
+@media only screen and (min-width : 768px) {
+	/*medium*/
+	.table {
+		height: calc(100% - 6rem);
+	}
+	header {
+		height: 6rem;
+	}
+	.col {
+		width: calc(33.33% - 1rem);
+	}
+}
+@media only screen and (min-width : 1200px) {
+	.table {
+		height: calc(100% - 3rem);
+	}
+	header {
+		height: 3rem;
+	}
+	.col {
+		width: calc(16.66% - 1rem);
+	}
+}
