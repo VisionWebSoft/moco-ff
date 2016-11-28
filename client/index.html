@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<title>Inventory</title>
+<meta charset="UTF-8">
+<meta theme-color="#eee">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/index.css">
+<style class="search"></style>
+<main>
+	<header class="row">
+		<span class="col">
+			<input autocomplete="off" class="search" list="autocomplete">
+			<input class="sort-toggle-button" type="radio" name="sort">
+			<label class="sort-toggle-label"></label>
+		</span>
+		<datalist id="autocomplete"></datalist>
+	</header>
+	<dl class="table"></dl>
+</main>
+<!--modules-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="js/mr.freeze.js"></script>
+<!--main-->
+<script src="js/index.js"></script>
+<script src="js/input.js"></script>
+<script src="js/logic.js"></script>
+<script src="js/output.js"></script>
+<script>window.onload=output.init;</script>
