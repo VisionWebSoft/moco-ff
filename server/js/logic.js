@@ -5,6 +5,7 @@ var state={};//don't expose state to other pages
 state.db=[];
 state.keys=[];
 global.logic={};
+logic.clone=obj=>JSON.parse(JSON.stringify(obj));
 logic.csv2json=function(csv)//merge with setDB!!
 {
 	var arr=csv.split(/\r?\n/);
@@ -48,9 +49,13 @@ logic.getNetworkIP=function()//if there are multiple IPs, this returns the first
 	}
 	return addresses[0];
 };
-logic.search=function()
+logic.search=function(query)
 {
-	
+	var props=Object.keys(query);//remove sort and focus!!
+	return logic.clone(state.db).filter(function(item)
+	{
+		return props.every(prop=>item[prop].match(query[prop]));
+	});//add sort function here!!
 };
 logic.setDB=function(data)
 {

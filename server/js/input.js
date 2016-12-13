@@ -38,7 +38,7 @@ input.get.database=function(req,res)
 {
 	res.json(logic.getDB());
 };
-input.post.query=function(req,res)
+input.post.search=function(req,res)
 {
 	res.json(logic.search(req.body));
 };

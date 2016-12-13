@@ -9,7 +9,7 @@ output.fields=function(arr)
 	arr.forEach(function(item)
 	{
 		var clone=original.clone(true);
-		clone.q('.search').attr('placeholder',item).on('input',input.search);
+		clone.q('.search').attr('placeholder',item).data('query',item).on('input',input.search);
 		clone.q('.sort-toggle-button').val(item).attr('id',item).on('click',input.sort);
 		clone.q('.sort-toggle-label').attr('for',item);
 		original.prev(clone);
@@ -23,24 +23,28 @@ output.firstChar=function(prop)
 };
 output.init=function()
 {
-	var start=Date.now();
 	mr.freeze(input,logic,output);
-	fetch('data/inventory.csv')
-	.then(res=>res.text())
-	.then(function(csv)
-	{
-		var json=logic.setDB(logic.csv2json(csv));
-		output.fields(logic.getKeys());
-		output.results(json);
-	});
-	/*fetch('api/keywords').then(logic.res2json).then(output.fields);
-	fetch('api/database').then(logic.res2json).then(output.results);*/
+	fetch('api/keywords/')
+	.then(res=>res.json())
+	.then(output.fields);
 	output.eventlisteners();
-	console.log('init time: '+(Date.now()-start));
 };
 output.heading=function(char)
 {
 	q('dl').last(q.create('dt').addClass('row').addClass('table__heading').html(char));
+};
+output.query=function()
+{
+	var obj={};
+	q('input.search').each(function()
+	{
+		var val=this.val();
+		if (!(val===''))
+		{
+			obj[this.data('query')]=val;
+		}
+	});
+	return obj;
 };
 output.results=function(arr,sortedProp='Item')
 {
