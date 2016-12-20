@@ -2,3 +2,4 @@ server/node_modules/
 *.bat
 *.csv
 err.out
+*.zip
