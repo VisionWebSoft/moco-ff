@@ -4,7 +4,6 @@ const compression=require('compression');
 const express=require('express');
 const fs=require('fs');
 const path=require('path');
-const Zip=require('jszip');
 global.output={};
 output.error=function(err)
 {

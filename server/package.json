@@ -9,7 +9,6 @@
 		"body-parser":"~1.x.x",
 		"compression":"~1.x.x",
 		"express":"~4.x.x",
-		"jszip":"~3.x.x",
 		"node-fetch":"~1.x.x"
 	}
 }
