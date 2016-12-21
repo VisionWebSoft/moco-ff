@@ -1,7 +1,8 @@
 'use strict';
 output.eventlisteners=function()
 {
-	q('button.close').on('click',input.close);
+	q('.close').on('click',input.close);
+	q('.open-modal').on('click',input.openModal);
 };
 output.fields=function(arr)
 {

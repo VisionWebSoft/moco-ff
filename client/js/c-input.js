@@ -3,6 +3,12 @@ input.close=function(event)
 {
 	q(event.target).parent('.modal').hide();
 };
+input.openModal=function(event)
+{
+	var btn=q(event.target);
+	q('.modal.'+btn.data('modal')).show();
+	btn.norm().blur();
+};
 input.search=function()
 {
 	var obj={data:output.query()};

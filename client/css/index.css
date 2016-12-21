@@ -24,9 +24,6 @@ header {
 }
 .table {
 	height: calc(100% - 3rem);
-	overflow-x: hidden;
-	overflow-y: scroll;
-	width: 100%;
 }
 .col {
 	display: flex;
@@ -81,6 +78,20 @@ header
 	/*Is this useful?!! Rationale: the eye can only count to four, these lines help break up the chunks so that rows are easier to distinguish. More info at: https://www.youtube.com/watch?v=z4ikTCTAAHU&index=15&list=PL322BE87D5C05D1E9*/
 	border-bottom: 0.1rem solid #222;
 }
+.floating-action
+{
+	border-radius:50%;
+	background-color:#45742D;
+	border:0.2rem;
+	bottom:1rem;
+	box-shadow:0 0 0.2rem #000;
+	color:#fff;
+	font-weight:bold;
+	height:2rem;
+	position:fixed;
+	right:1rem;
+	width:2rem;
+}
 /*state*/
 ::selection {
 	background: #f93;
@@ -88,12 +99,26 @@ header
 ::-moz-selection {/*remove if not using FF!!*/
 	background: #f93;
 }
+button:hover
+{
+	cursor:pointer;
+}
+button:focus
+{
+	outline:none;
+	transition:opacity 0.2s;
+	opacity:0.5;
+}
 .sort-toggle-button:checked~.sort-toggle-label {
 	background-image: url(../imgs/down.svg);
 }
-/*small*/
+	/*small*/
 .main {
+	background-color:#f8f8f8;
 	height: calc(100% - 9rem);
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 100%;
 }
 header {
 	height: 9rem;
@@ -113,6 +138,7 @@ header {
 		width: calc(33.33% - 1rem);
 	}
 }
+	/*large*/
 @media only screen and (min-width : 1200px) {
 	.main {
 		height: calc(100% - 3rem);
