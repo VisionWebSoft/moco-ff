@@ -42,6 +42,12 @@ input::-webkit-input-placeholder {
 	text-indent: 0.5rem;
 }
 /*module*/
+.modal
+{
+	height:100%;
+	position:fixed;
+	width:100%;
+}
 header
 {
 	background-color: #5e8d46;
@@ -86,7 +92,7 @@ header
 	background-image: url(../imgs/down.svg);
 }
 /*small*/
-.table {
+.main {
 	height: calc(100% - 9rem);
 }
 header {
@@ -97,7 +103,7 @@ header {
 }
 @media only screen and (min-width : 768px) {
 	/*medium*/
-	.table {
+	.main {
 		height: calc(100% - 6rem);
 	}
 	header {
@@ -108,7 +114,7 @@ header {
 	}
 }
 @media only screen and (min-width : 1200px) {
-	.table {
+	.main {
 		height: calc(100% - 3rem);
 	}
 	header {
