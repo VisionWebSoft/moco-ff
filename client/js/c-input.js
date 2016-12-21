@@ -1,4 +1,8 @@
 'use strict';
+input.close=function(event)
+{
+	q(event.target).parent('.modal').hide();
+};
 input.search=function()
 {
 	var obj={data:output.query()};

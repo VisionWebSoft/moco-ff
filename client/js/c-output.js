@@ -1,6 +1,7 @@
 'use strict';
 output.eventlisteners=function()
 {
+	q('button.close').on('click',input.close);
 };
 output.fields=function(arr)
 {
