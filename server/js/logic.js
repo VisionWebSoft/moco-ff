@@ -24,14 +24,8 @@ logic.csv2json=function(csv)//merge with setDB!!
 		return obj;
 	});
 };
-logic.getKeywords=function()
-{
-	return state.keys;
-};
-logic.getDB=function()
-{
-	return state.db;
-};
+logic.getKeywords=()=>state.keys;
+logic.getDB=()=>state.db;
 logic.getNetworkIP=function()//if there are multiple IPs, this returns the first IP
 {
 	var addresses=[];
