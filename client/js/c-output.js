@@ -40,10 +40,10 @@ output.query=function()
 	var obj={};
 	q('input.search').each(function()
 	{
-		var val=this.val();
+		var val=this.val()+'';
 		if (!(val===''))
 		{
-			obj[this.data('query')]=val;
+			obj[this.data('query')+'']=val;
 		}
 	});
 	return obj;
