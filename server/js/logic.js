@@ -57,6 +57,35 @@ logic.search=function(query)
 		return props.every(prop=>item[prop].match(query[prop]));
 	});//add sort function here!!
 };
+logic.search=function(query)
+{
+	var props=Object.keys(query);//remove sort and focus!!
+	var arr=[];
+	var entries=logic.clone(state.db);
+	var errors=[];
+	entries.forEach(function(item,i)
+	{
+		try
+		{
+			//this errors out if the item does not have a property
+			var bool=props.every(function(prop)
+			{
+				return item[prop]?item[prop].toLowerCase().match(query[prop].toLowerCase()):false;
+			});
+			if (bool)
+			{
+				arr.push(item);
+			}
+		}
+		catch (err)
+		{
+			errors.push(item);
+		}
+
+	});//add sort function here!!
+	console.log(errors.lengh||'horray!');
+	return arr;
+};
 logic.setDB=function(data)
 {
 	state.db=logic.csv2json(data);
