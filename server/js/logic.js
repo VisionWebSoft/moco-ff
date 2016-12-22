@@ -62,28 +62,17 @@ logic.search=function(query)
 	var props=Object.keys(query);//remove sort and focus!!
 	var arr=[];
 	var entries=logic.clone(state.db);
-	var errors=[];
 	entries.forEach(function(item,i)
 	{
-		try
+		var bool=props.every(function(prop)
 		{
-			//this errors out if the item does not have a property
-			var bool=props.every(function(prop)
-			{
-				return item[prop]?item[prop].toLowerCase().match(query[prop].toLowerCase()):false;
-			});
-			if (bool)
-			{
-				arr.push(item);
-			}
-		}
-		catch (err)
+			return item[prop]?item[prop].toLowerCase().match(query[prop].toLowerCase()):false;
+		});
+		if (bool)
 		{
-			errors.push(item);
+			arr.push(item);
 		}
-
 	});//add sort function here!!
-	console.log(errors.lengh||'horray!');
 	return arr;
 };
 logic.setDB=function(data)
