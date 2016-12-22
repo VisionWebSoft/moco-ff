@@ -52,24 +52,27 @@ output.results=function(arr,sortedProp='Item')
 {
 	var props=logic.getKeys();
 	var list=q('dl').html('');
-	var heading=output.firstChar(arr[0][sortedProp]);
-	output.heading(heading);
-	arr.forEach(function(item)
+	if (arr.length)
 	{
-		var row=q.create('dd').addClass('row').addClass('table__item');
-		props.forEach(function(prop)
+		var heading=output.firstChar(arr[0][sortedProp]);
+		output.heading(heading);
+		arr.forEach(function(item)
 		{
-			var val=item[prop]||'';
-			var col=q.create('span').addClass('col').html(val);
-			row.last(col).data(logic.colName2dataAttr(prop),val.toLowerCase());
+			var row=q.create('dd').addClass('row').addClass('table__item');
+			props.forEach(function(prop)
+			{
+				var val=item[prop]||'';
+				var col=q.create('span').addClass('col').html(val);
+				row.last(col).data(logic.colName2dataAttr(prop),val.toLowerCase());
+			});
+			var char=output.firstChar(item[sortedProp])
+			if (heading!=char)
+			{
+				heading=char;
+				output.heading(heading);
+			}
+			list.last(row);
 		});
-		var char=output.firstChar(item[sortedProp])
-		if (heading!=char)
-		{
-			heading=char;
-			output.heading(heading);
-		}
-		list.last(row);
-	});
-	logic.setDB(arr);
+		logic.setDB(arr);
+	}
 };
