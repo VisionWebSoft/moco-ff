@@ -49,31 +49,14 @@ logic.getNetworkIP=function()//if there are multiple IPs, this returns the first
 	}
 	return addresses[0];
 };
-logic.search=function(query)
+logic.match=function(query,entry)//simplify!!
 {
-	var props=Object.keys(query);//remove sort and focus!!
-	return logic.clone(state.db).filter(function(item)
-	{
-		return props.every(prop=>item[prop].match(query[prop]));
-	});//add sort function here!!
+	return entry?entry.toLowerCase().match(query.toLowerCase()):false;
 };
 logic.search=function(query)
 {
 	var props=Object.keys(query);//remove sort and focus!!
-	var arr=[];
-	var entries=logic.clone(state.db);
-	entries.forEach(function(item,i)
-	{
-		var bool=props.every(function(prop)
-		{
-			return item[prop]?item[prop].toLowerCase().match(query[prop].toLowerCase()):false;
-		});
-		if (bool)
-		{
-			arr.push(item);
-		}
-	});//add sort function here!!
-	return arr;
+	return logic.clone(state.db).filter(item=>props.every(prop=>logic.match(query[prop],item[prop])));//add sort function here!!
 };
 logic.setDB=function(data)
 {
