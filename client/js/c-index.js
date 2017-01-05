@@ -1,10 +1,11 @@
 'use strict';
-window.config={};
-window.input={};
-window.logic={};
-window.output={};
-(function()
+
+(function(gl)
 {
+	gl.config={};
+	gl.input={};
+	gl.logic={};
+	gl.output={};
 	var state={};
 	logic.getDB=function()
 	{
@@ -26,4 +27,4 @@ window.output={};
 		state.keys=obj;
 		return obj;
 	};
-})();
+})(window);
