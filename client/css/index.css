@@ -51,6 +51,7 @@ header
 }
 .search {
 	border: 0;
+	border-radius: 0;
 	height: 100%;
 	padding: 0;
 	width: calc(100% - 2rem);
@@ -108,6 +109,10 @@ button:focus
 	outline:none;
 	transition:opacity 0.2s;
 	opacity:0.5;
+}
+input:focus
+{
+	outline:none;
 }
 .sort-toggle-button:checked~.sort-toggle-label {
 	background-image: url(../imgs/down.svg);
