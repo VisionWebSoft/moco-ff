@@ -3,8 +3,16 @@ const bodyParser=require('body-parser');
 const compression=require('compression');
 const express=require('express');
 const fs=require('fs');
+const mongoose=require('mongoose');
 const path=require('path');
+
 global.output={};
+output.connect=function()
+{
+	mongoose.connect('mongodb://localhost:27017/moco-ff');
+	var db=mongoose=connection;
+	db.on('error',output.error);
+};
 output.error=function(err)
 {
 	if (err)
