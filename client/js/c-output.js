@@ -27,7 +27,10 @@ output.init=function()
 {
 	mr.freeze(input,logic,output);
 	fetch('api/keywords/')
-	.then(res=>res.json())
+	.then(function(res)
+	{
+		return res.json();
+	})
 	.then(output.fields);
 	output.eventlisteners();
 };
