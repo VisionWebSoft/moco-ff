@@ -1,85 +1,86 @@
 var mongoose=require('mongoose');
 var schema={};
-var collections={};
-var contactSchema=new mongoose.Schema(
+var collections=
 {
-	name:
+	contacts:
 	{
-		required:true,
-		trim:true,
-		type:String
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String
+		}
+	},
+	departments:
+	{
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String
+		}
+	},
+	items:
+	{
+		contact:
+		{
+			required:true,
+			type:ObjectId
+		},
+		desc:
+		{
+			trim:true,
+			type:String,
+		},
+		department:
+		{
+			required:true,
+			type:ObjectId
+		},
+		item:
+		{
+			required:true;
+			trim:true,
+			type:String,
+		},
+		'on-hand':
+		{
+			trim:true,
+			type:String,
+		},
+		unit:
+		{
+			required:true,
+			type:ObjectId
+		}
+	},
+	units:
+	{
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String
+		}
+	},
+	users:
+	{
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String
+		},
+		password://must encypt this!!
+		{
+			required:true,
+			type:String
+		}
 	}
-});
-var departmentSchema=new mongoose.Schema(
+};
+Object.keys(collections).forEach(function(collection)
 {
-	name:
-	{
-		required:true,
-		trim:true,
-		type:String
-	}
+	var val=new mongoose.Schema(collections[collection]);
+	schema[collection]=mongoose.model(collection,val);
 });
-var itemSchema=new mongoose.Schema(
-{
-	contact:
-	{
-		required:true,
-		type:ObjectId
-	},
-	desc:
-	{
-		trim:true,
-		type:String,
-	},
-	department:
-	{
-		required:true,
-		type:ObjectId
-	},
-	item:
-	{
-		required:true;
-		trim:true,
-		type:String,
-	},
-	'on-hand':
-	{
-		trim:true,
-		type:String,
-	},
-	unit:
-	{
-		required:true,
-		type:ObjectId
-	}
-});
-var unitSchema=new mongoose.Schema(
-{
-	name:
-	{
-		required:true,
-		trim:true,
-		type:String
-	}
-});
-var userSchema=new mongoose.Schema(
-{
-	name:
-	{
-		required:true,
-		trim:true,
-		type:String
-	},
-	password://must encypt this!!
-	{
-		required:true,
-		type:String
-	}
-});
-
-schema.contact=mongoose.model('Contact',contactSchema);
-schema.department=mongoose.model('Department',departmentSchema);
-schema.item=mongoose.model('Item',itemSchema);
-schema.unit=mongoose.model('Unit',unitSchema);
-schema.user=mongoose.model('User',userSchema);
 module.exports=schema;
