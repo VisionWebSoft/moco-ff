@@ -3,16 +3,22 @@ const bodyParser=require('body-parser');
 const compression=require('compression');
 const express=require('express');
 const fs=require('fs');
-//const mongoose=require('mongoose');
+const mongoose=require('mongoose');
 const path=require('path');
+//mongoose schemas
+const schemas=require('./schema.js')
 
 global.output={};
-/*output.connect=function()
+output.connect=function()
 {
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
-	var db=mongoose=connection;
+	var db=mongoose.connection;
 	db.on('error',output.error);
-};*/
+	//clear database
+	//create "tables"
+	//fill database
+		//use logic.uniqe to gather: contacts, units, and depts
+};
 output.error=function(err)
 {
 	if (err)
@@ -39,10 +45,11 @@ output.init=function(url)
 		{
 			logic.setDB(data);
 			let ip=logic.getNetworkIP();
-			console.log(ip+':8080');
+			console.log(ip);
 			output.server(url,ip);
 		}
 	});
+	output.connect();
 };
 output.server=function(url,ip)
 {
@@ -63,7 +70,7 @@ output.server=function(url,ip)
 	app.all('/api/:route/',input.router);
 	//init
 	app.use(output.errorPage);	
-	app.listen(8080,logic.getNetworkIP());//app.listen(8080,logic.getNetworkIP());
+	app.listen(80,logic.getNetworkIP());//app.listen(8080,logic.getNetworkIP());
 };
 output.zip=function(path,json)
 {
