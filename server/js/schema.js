@@ -1,5 +1,6 @@
 var mongoose=require('mongoose');
 var schema={};
+var ObjectId=mongoose.Schema.Types.ObjectId;
 var collections=
 {
 	contacts:
@@ -39,7 +40,7 @@ var collections=
 		},
 		item:
 		{
-			required:true;
+			required:true,
 			trim:true,
 			type:String,
 		},
