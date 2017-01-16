@@ -1,0 +1,42 @@
+var mongoose=require('mongoose');
+var schema={};
+//contacts
+//departments
+var itemSchema=new mongoose.Schema(
+{
+	contact:
+	{
+		required:true,
+		type:ObjectId
+	},
+	desc:
+	{
+		trim:true,
+		type:String,
+	},
+	department:
+	{
+		required:true,
+		type:ObjectId
+	},
+	item:
+	{
+		required:true;
+		trim:true,
+		type:String,
+	},
+	'on-hand':
+	{
+		trim:true,
+		type:String,
+	},
+	unit:
+	{
+		required:true,
+		type:ObjectId
+	}
+});
+//units
+//users
+schema.item=mongoose.model('Item',itemSchema);
+module.exports=schema;
