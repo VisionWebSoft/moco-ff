@@ -3,7 +3,7 @@ var schema={};
 var ObjectId=mongoose.Schema.Types.ObjectId;
 var collections=
 {
-	contacts:
+	contact:
 	{
 		name:
 		{
@@ -12,7 +12,7 @@ var collections=
 			type:String
 		}
 	},
-	departments:
+	department:
 	{
 		name:
 		{
@@ -21,7 +21,7 @@ var collections=
 			type:String
 		}
 	},
-	items:
+	item:
 	{
 		contact:
 		{
@@ -55,7 +55,7 @@ var collections=
 			type:ObjectId
 		}
 	},
-	units:
+	unit:
 	{
 		name:
 		{
@@ -64,7 +64,7 @@ var collections=
 			type:String
 		}
 	},
-	users:
+	user:
 	{
 		name:
 		{
