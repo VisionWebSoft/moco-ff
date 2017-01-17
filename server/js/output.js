@@ -7,7 +7,9 @@ const fs=require('fs');
 const mongoose=require('mongoose');
 const path=require('path');
 //mongoose schemas
-const schemas=require('./schema.js')
+const schema=require('./schema.js')
+
+logic.uniqueEntries=(arr,prop)=>arr.map(item=>logic.trim(item[prop]||'')).filter(logic.unique).filter(str=>str.length).sort();
 
 global.output={};
 output.connect=function()
@@ -15,22 +17,21 @@ output.connect=function()
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
 	var db=mongoose.connection;
 	db.on('error',output.error);
+	var json=logic.getDB();
+	var contacts=logic.uniqueEntries(json,'Contact Person');
+	var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
+	var units=logic.uniqueEntries(json,'Unit Number');
+	
+	//schema.contact();
 	//clear database
 	//create "tables"
 	//fill database
-/*	var userData={email,name};
-	User.create(userData,function(err,user)//User is the schema!!
+	
+	//this will generate the contacts collections fine!!
+	contacts.map(name=>({name})).forEach(function(obj)
 	{
-		if (err)
-		{
-			output.error(err);
-		}
-		else
-		{
-			//success!!
-		}
-	});*/
-		//use logic.uniqe to gather: contacts, units, and depts
+		schema.contact.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name));
+	});
 };
 output.error=function(err)
 {
@@ -61,7 +62,6 @@ output.init=function(url)
 			console.log(ip);
 			output.server(url,ip);
 			output.connect();
-			console.log(logic.getDB()[0]);
 		}
 	});
 };
