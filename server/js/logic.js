@@ -53,3 +53,4 @@ logic.search=function(query)
 	return logic.clone(state.db).filter(item=>props.every(prop=>logic.match(query[prop],item[prop])));//add sort function here!!
 };
 logic.setDB=data=>state.db=logic.csv2json(data);
+logic.unique=(val,i,arr)=>arr.indexOf(val)===i;
