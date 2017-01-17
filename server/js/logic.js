@@ -52,7 +52,4 @@ logic.search=function(query)
 	var props=Object.keys(query);//remove sort and focus!!
 	return logic.clone(state.db).filter(item=>props.every(prop=>logic.match(query[prop],item[prop])));//add sort function here!!
 };
-logic.setDB=function(data)
-{
-	state.db=logic.csv2json(data);
-};
+logic.setDB=data=>state.db=logic.csv2json(data);
