@@ -1,5 +1,6 @@
 'use strict';
 const bodyParser=require('body-parser');
+const bcrypt=require('bcryptjs');
 const compression=require('compression');
 const express=require('express');
 const fs=require('fs');
@@ -17,6 +18,18 @@ output.connect=function()
 	//clear database
 	//create "tables"
 	//fill database
+/*	var userData={email,name};
+	User.create(userData,function(err,user)//User is the schema!!
+	{
+		if (err)
+		{
+			output.error(err);
+		}
+		else
+		{
+			//success!!
+		}
+	});*/
 		//use logic.uniqe to gather: contacts, units, and depts
 };
 output.error=function(err)
@@ -47,9 +60,10 @@ output.init=function(url)
 			let ip=logic.getNetworkIP();
 			console.log(ip);
 			output.server(url,ip);
+			output.connect();
+			console.log(logic.getDB()[0]);
 		}
 	});
-	output.connect();
 };
 output.server=function(url,ip)
 {
