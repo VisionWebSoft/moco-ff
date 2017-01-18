@@ -9,7 +9,8 @@ var collections=
 		{
 			required:true,
 			trim:true,
-			type:String
+			type:String,
+			unique:true
 		}
 	},
 	department:
@@ -18,7 +19,8 @@ var collections=
 		{
 			required:true,
 			trim:true,
-			type:String
+			type:String,
+			unique:true
 		}
 	},
 	item:
@@ -61,7 +63,8 @@ var collections=
 		{
 			required:true,
 			trim:true,
-			type:String
+			type:String,
+			unique:true
 		}
 	},
 	user:
@@ -70,7 +73,8 @@ var collections=
 		{
 			required:true,
 			trim:true,
-			type:String
+			type:String,
+			unique:true
 		},
 		password://must encypt this!!
 		{
