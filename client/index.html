@@ -10,6 +10,13 @@
 <link rel="stylesheet" href="css/index.css">
 <style class="search"></style>
 <main>
+	<aside class="banner">
+		<button class="close">close</button>
+		<ul class="main">
+			<li>Type a search query into the appropriate field to retrieve relevant results.</li>
+			<li>Click the button with the dash beside the input fields to sort results by that column's values.</li>
+		</ul>
+	</aside>
 	<header class="row">
 		<span class="col">
 			<input autocomplete="off" class="search" list="autocomplete">
@@ -19,18 +26,7 @@
 		<datalist id="autocomplete"></datalist>
 	</header>
 	<dl class="main table"></dl>
-	<button class="floating-action open-modal" data-modal="help" title="show instructions">?</button>
 </main>
-<section class="help modal" hidden>
-	<header class="row">
-		<h1>Help</h1>
-		<button class="close">close</button>
-	</header>
-	<ul class="main">
-		<li>Type a search query into the appropriate field to retrieve relevant results.</li>
-		<li>Click the button with the dash beside the input fields to sort results by that column's values.</li>
-	</ul>
-</section>
 <!--modules-->
 <script src="js/q.min.es4.js"></script>
 <script src="js/fetch-polyfill.js"></script>

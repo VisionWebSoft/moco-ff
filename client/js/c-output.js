@@ -2,7 +2,6 @@
 output.eventlisteners=function()
 {
 	q('.close').on('click',input.close);
-	q('.open-modal').on('click',input.openModal);
 };
 output.fields=function(arr)
 {
