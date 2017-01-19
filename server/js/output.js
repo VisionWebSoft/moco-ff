@@ -39,7 +39,6 @@ output.init=function(url)
 		{
 			logic.setDB(data);
 			let ip=logic.getNetworkIP();
-			console.log(ip+':8080');
 			output.server(url,ip);
 		}
 	});
@@ -63,7 +62,7 @@ output.server=function(url,ip)
 	app.all('/api/:route/',input.router);
 	//init
 	app.use(output.errorPage);	
-	app.listen(8080,logic.getNetworkIP());//app.listen(8080,logic.getNetworkIP());
+	app.listen(80,logic.getNetworkIP());
 };
 output.zip=function(path,json)
 {
