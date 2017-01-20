@@ -73,7 +73,7 @@ header
 }
 .sort-toggle-label {
 	background-color: #45742D;
-	background-image: url(../imgs/-.svg);
+	background-image: url(../img/-.svg);
 	background-size: 100% 100%;
 	height: 100%;
 	width: 2rem;
@@ -121,7 +121,7 @@ input:focus
 	outline:none;
 }
 .sort-toggle-button:checked~.sort-toggle-label {
-	background-image: url(../imgs/down.svg);
+	background-image: url(../img/down.svg);
 }
 	/*small*/
 .main {
