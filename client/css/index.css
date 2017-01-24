@@ -1,5 +1,4 @@
 /*base*/
-@import 'reset.css';
 @import 'base.css';
 /*modules*/
 @import 'header-footer.css';
@@ -21,12 +20,6 @@
 {
 	height:2.5rem;
 	margin:0.3rem;
-}
-.modal
-{
-	height:100%;
-	position:fixed;
-	width:100%;
 }
 .banner
 {
@@ -67,14 +60,6 @@
 	border-bottom: 0.1rem solid #222;
 }
 /*state*/
-[hidden]
-{
-	display:none !important;
-}
-input:focus
-{
-	outline:none;
-}
 .sort-toggle-button:checked~.sort-toggle-label {
 	background-image: url(../img/down.svg);
 }
