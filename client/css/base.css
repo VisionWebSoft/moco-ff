@@ -1,0 +1,44 @@
+html,
+body,
+main {
+	font-family: sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+body {
+	display: flex;
+}
+::selection {
+	background: #f93;
+}
+::-moz-selection {
+	background: #f93;
+}
+dl {
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+}
+dd {
+	-webkit-margin-start: 0;
+}
+input::-webkit-input-placeholder {
+	text-indent: 0.5rem;
+}
+ul {
+	-webkit-margin-before:0;
+	-webkit-margin-after:0;
+	-webkit-padding-start:0;
+	padding:0.5rem;
+	padding-left:1.5rem;
+}
+/*state*/
+[hidden]
+{
+	display:none !important;
+}
+input:focus
+{
+	outline:none;
+}

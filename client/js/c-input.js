@@ -1,7 +1,7 @@
 'use strict';
 input.close=function(event)
 {
-	q(event.target).parent('.modal').hide();
+	q(event.target).parent('.banner,.modal').hide();
 };
 input.openModal=function(event)
 {

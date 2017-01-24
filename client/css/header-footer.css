@@ -1,0 +1,14 @@
+header,
+footer {
+	background-color: #5e8d46;
+}
+header {
+	height: 3rem;
+}
+footer {
+	color:#fff;
+	height:1.5rem;
+	font-size:0.75rem;
+	line-height:225%;
+	text-align:center;
+}

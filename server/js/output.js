@@ -156,7 +156,7 @@ output.server=function(url,ip)
 	app.all('/api/:route/',input.router);
 	//init
 	app.use(output.errorPage);	
-	app.listen(80,logic.getNetworkIP());//app.listen(8080,logic.getNetworkIP());
+	app.listen(80,logic.getNetworkIP());
 };
 output.zip=function(path,json)
 {
