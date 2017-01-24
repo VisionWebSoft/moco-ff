@@ -63,7 +63,7 @@ logic.json2mongo=function(arr)
 		console.log('done!');
 	}
 };
-
+global.output={};
 output.newDatabase=function()
 {
 	//create items
@@ -83,9 +83,6 @@ output.newDatabase=function()
 	schema.user.create({user:'user',password:'1longPassPhrase!'},(err,obj)=>err?output.error(err):console.log(obj));
 	schema.user.create({user:'admin',password:'ul7r4%3cur3C0d3!'},(err,obj)=>err?output.error(err):console.log(obj));
 };
-
-
-global.output={};
 output.connect=function()
 {
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
