@@ -1,0 +1,18 @@
+html,
+body,
+main {
+	font-family: sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+body {
+	display: flex;
+}
+::selection {
+	background: #f93;
+}
+::-moz-selection {/*remove if not using FF!!*/
+	background: #f93;
+}
