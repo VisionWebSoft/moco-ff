@@ -34,7 +34,7 @@ input.get.keywords=function(req,res)
 {
 	res.json(logic.getKeywords());
 };
-input.get.database=function(req,res)
+input.get.database=function(req,res)//remove?!!
 {
 	res.json(logic.getDB());
 };
