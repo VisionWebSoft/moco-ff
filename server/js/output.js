@@ -8,9 +8,7 @@ const mongoose=require('mongoose');
 const path=require('path');
 //mongoose schemas
 const schema=require('./schema.js')
-
 logic.uniqueEntries=(arr,prop)=>arr.map(item=>logic.trim(item[prop]||'')).filter(logic.unique).filter(str=>str.length).sort();
-
 logic.val2link=function(obj,prop,collection)
 {
 	return new Promise(function(resolve,reject)
@@ -18,11 +16,12 @@ logic.val2link=function(obj,prop,collection)
 		if (obj[prop])
 		{
 			var query={name:obj[prop]};
+			console.log(query);
 			schema[collection].findOne(query,function(err,match)
 			{
 				if (err)
 				{
-					reject(obj);
+					reject(err);
 				}
 				else
 				{
@@ -37,7 +36,6 @@ logic.val2link=function(obj,prop,collection)
 		}
 	});
 };
-
 logic.json2mongo=function(arr)
 {
 	if (arr.length)
@@ -47,15 +45,11 @@ logic.json2mongo=function(arr)
 		{
 			obj[prop]=logic.trim(obj[prop]);
 		});
-	
 		logic.val2link(obj,'Contact Person','contact')
 		.then(obj=>logic.val2link(obj,'Unit Number','unit'))
 		.then(obj=>logic.val2link(obj,'Fire Department','department'))
-		//add new item to mongo here!!
-		.then(function()
-		{
-			logic.json2mongo(arr);
-		})
+		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
+		.then(()=>logic.json2mongo(arr))
 		.catch(output.error);
 	}
 	else
@@ -64,53 +58,11 @@ logic.json2mongo=function(arr)
 	}
 };
 global.output={};
-output.newDatabase=function(url)
-{
-	mr.freeze(config,input,logic,output);
-	fs.readFile(url+'/data/inventory.csv','utf8',function(err,data)
-	{
-		if (err)
-		{
-			output.error(err);
-		}
-		else
-		{
-			logic.setDB(data);
-			mongoose.connect('mongodb://localhost:27017/moco-ff');
-			var db=mongoose.connection;
-			db.on('error',output.error);
-			var json=logic.getDB();
-			var contacts=logic.uniqueEntries(json,'Contact Person');
-			var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
-			var units=logic.uniqueEntries(json,'Unit Number');	
-			//create items
-			contacts.map(name=>({name})).forEach(obj=>schema.contact.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)));
-			depts.map(name=>({name})).forEach(obj=>schema.department.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)));
-			units.map(name=>({name})).forEach(obj=>schema.unit.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)));
-			logic.json2mongo(logic.getDB());
-			//create users
-			schema.user.pre('save',function(next)
-			{
-				var user=this;
-				var salt=bcrypt.genSaltSync(10);
-				var hash=bcrypt.hashSync(user.password,salt);
-				user.password=hash;
-				next();
-			});
-			schema.user.create({user:'user',password:'1longPassPhrase!'},(err,obj)=>err?output.error(err):console.log(obj));
-			schema.user.create({user:'admin',password:'ul7r4%3cur3C0d3!'},(err,obj)=>err?output.error(err):console.log(obj));
-		}
-	});
-};
 output.connect=function()
 {
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
 	var db=mongoose.connection;
-	db.on('error',output.error);
-	var json=logic.getDB();
-	var contacts=logic.uniqueEntries(json,'Contact Person');
-	var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
-	var units=logic.uniqueEntries(json,'Unit Number');	
+	db.on('error',output.error);	
 /*	bcrypt.compare("1longPassPhrase!",hash).then(function(res)
 	{
 		console.log(res);//boolean
