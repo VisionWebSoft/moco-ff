@@ -8,4 +8,4 @@ require('./js/config.js');
 require('./js/input.js');
 require('./js/logic.js');
 require('./js/output.js');
-output.newDatabase();
+output.newDatabase(__dirname);
