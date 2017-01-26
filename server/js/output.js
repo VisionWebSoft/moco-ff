@@ -125,12 +125,38 @@ output.newDatabase=function(url)
 			var contacts=logic.uniqueEntries(json,'Contact Person');
 			var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
 			var units=logic.uniqueEntries(json,'Unit Number');	
-			//create items
-			contacts.forEach(name=>schema.contact.create({name},output.entry));
-			depts.forEach(name=>schema.department.create({name},output.entry));
-			units.forEach(name=>schema.unit.create({name},output.entry));
-			/*//create users
-			var users=require('../data/users.json');
+			//create collections
+			logic.asyncLoop(contacts,function(name)
+			{
+				return new Promise(function(resolve,reject)
+				{
+					schema.contact.create({name},(err,obj)=>err?reject(err):resolve(obj));
+				});
+			})
+			.then(function()
+			{
+				return logic.asyncLoop(depts,function(name)
+				{
+					return new Promise(function(resolve,reject)
+					{
+						schema.department.create({name},(err,obj)=>err?reject(err):resolve(obj));
+					});
+				});
+			})
+			.then(function()
+			{
+				return logic.asyncLoop(units,function(name)
+				{
+					return new Promise(function(resolve,reject)
+					{
+						schema.unit.create({name},(err,obj)=>err?reject(err):resolve(obj));
+					});
+				});
+			})
+			.then(()=>console.log('done!'))
+			.catch(()=>console.log('failed...'));
+			//create users
+			/*var users=require('../data/users.json');
 			users.forEach(function(user)
 			{
 				var salt=bcrypt.genSaltSync(10);
