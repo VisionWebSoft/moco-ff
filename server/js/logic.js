@@ -5,6 +5,17 @@ var state={};//don't expose state to other pages
 state.db=[];
 state.keys=[];
 global.logic={};
+logic.asyncLoop=function(arr,func)
+{
+	return new Promise(function(resolve,reject)
+	{
+		var loop=function(arr)
+		{
+			arr.length?func(arr.pop()).then(()=>loop(arr)).catch(reject):resolve();
+		};
+		loop(arr);
+	});
+};
 logic.clone=obj=>JSON.parse(JSON.stringify(obj));
 logic.csv2json=function(csv)//merge with setDB!!
 {
