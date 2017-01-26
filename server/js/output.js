@@ -65,30 +65,33 @@ output.errorPage=function(req,res)
 	res.status(400);
 	res.send('No file found at: '+req.path);
 };
+output.json=function(url)
+{
+	return new Promise(function(resolve,reject)
+	{
+		fs.readFile(url+'/data/inventory.csv','utf8',(err,data)=>err?reject(err):resolve(data));
+	});
+};
 output.init=function(url)
 {
 	mr.freeze(config,input,logic,output);
-	fs.readFile(url+'/data/inventory.csv','utf8',function(err,data)
+	output.json(url)
+	.then(function(data)
 	{
-		if (err)
-		{
-			output.error(err);
-		}
-		else
-		{
-			logic.setDB(data);
-			let ip=logic.getNetworkIP();
-			console.log(ip);
-			output.server(url,ip);
-			output.connect();
-		}
-	});
+		logic.setDB(data);
+		let ip=logic.getNetworkIP();
+		console.log(ip);
+		output.server(url,ip);
+		output.connect();
+	})
+	.catch(output.error);
 };
 output.entry=(err,obj)=>err?output.error(err):console.log(obj.name);
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
 	var users=require('../data/users.json');
+	//output.json(url);	
 	fs.readFile(url+'/data/inventory.csv','utf8',function(err,data)
 	{
 		if (err)
