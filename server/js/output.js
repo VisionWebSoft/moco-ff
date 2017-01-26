@@ -36,27 +36,6 @@ logic.val2link=function(obj,prop,collection)
 		}
 	});
 };
-logic.json2mongo=function(arr)
-{
-	if (arr.length)
-	{
-		var obj=arr.pop();
-		Object.keys(obj).forEach(function(prop)
-		{
-			obj[prop]=logic.trim(obj[prop]);
-		});
-		logic.val2link(obj,'Contact Person','contact')
-		.then(obj=>logic.val2link(obj,'Unit Number','unit'))
-		.then(obj=>logic.val2link(obj,'Fire Department','department'))
-		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
-		.then(()=>logic.json2mongo(arr))
-		.catch(output.error);
-	}
-	else
-	{
-		console.log('done!');
-	}
-};
 global.output={};
 output.connect=function()
 {
@@ -109,6 +88,7 @@ output.entry=(err,obj)=>err?output.error(err):console.log(obj.name);
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
+	var users=require('../data/users.json');
 	fs.readFile(url+'/data/inventory.csv','utf8',function(err,data)
 	{
 		if (err)
@@ -153,22 +133,67 @@ output.newDatabase=function(url)
 					});
 				});
 			})
+			.then(function()
+			{
+				var salt=bcrypt.genSaltSync(10);
+				return logic.asyncLoop(users,function(user)
+				{
+					return new Promise(function(resolve,reject)
+					{
+						var hash=bcrypt.hashSync(user.password,salt);
+						user.password=hash;
+						console.log(user);
+						schema.user.create(user,function(err,obj)
+						{
+							
+							if (err)
+							{
+								console.error(err);
+								reject(err);
+							}
+							else
+							{
+								resolve(obj);
+							}
+						});
+					});
+				});
+			})
+			.then(function()
+			{
+				return new Promise(function(resolve,reject)
+				{
+					//logic.json2mongo(logic.getDB());
+					resolve();
+				});
+			})
 			.then(()=>console.log('done!'))
 			.catch(()=>console.log('failed...'));
 			//create users
-			/*var users=require('../data/users.json');
-			users.forEach(function(user)
-			{
-				var salt=bcrypt.genSaltSync(10);
-				var hash=bcrypt.hashSync(user.password,salt);
-				user.password=hash;
-				console.log(user);
-				schema.user.create(user,(err,obj)=>err?output.error(err):console.log(obj));
-			});
-			logic.json2mongo(logic.getDB());*/
 			setTimeout(console.log,1000*60);
 		}
 	});
+};
+logic.json2mongo=function(arr)
+{
+	if (arr.length)
+	{
+		var obj=arr.pop();
+		Object.keys(obj).forEach(function(prop)
+		{
+			obj[prop]=logic.trim(obj[prop]);
+		});
+		logic.val2link(obj,'Contact Person','contact')
+		.then(obj=>logic.val2link(obj,'Unit Number','unit'))
+		.then(obj=>logic.val2link(obj,'Fire Department','department'))
+		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
+		.then(()=>logic.json2mongo(arr))
+		.catch(output.error);
+	}
+	else
+	{
+		console.log('done!');
+	}
 };
 output.server=function(url,ip)
 {
