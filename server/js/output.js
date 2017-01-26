@@ -87,12 +87,21 @@ output.init=function(url)
 	.catch(output.error);
 };
 output.entry=(err,obj)=>err?output.error(err):console.log(obj.name);
-
+output.collection=function(arr,collection)
+{
+	return logic.asyncLoop(arr,function(name)
+	{
+		return new Promise(function(resolve,reject)
+		{
+			schema[collection].create({name},(err,obj)=>err?reject(err):resolve(obj));
+		});
+	});
+};
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
 	var users=require('../data/users.json');
-	output.json(url);
+	output.json(url)
 	.then(function(data)
 	{
 		logic.setDB(data);
@@ -104,33 +113,9 @@ output.newDatabase=function(url)
 		var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
 		var units=logic.uniqueEntries(json,'Unit Number');	
 		//create collections
-		logic.asyncLoop(contacts,function(name)
-		{
-			return new Promise(function(resolve,reject)
-			{
-				schema.contact.create({name},(err,obj)=>err?reject(err):resolve(obj));
-			});
-		})
-		.then(function()
-		{
-			return logic.asyncLoop(depts,function(name)
-			{
-				return new Promise(function(resolve,reject)
-				{
-					schema.department.create({name},(err,obj)=>err?reject(err):resolve(obj));
-				});
-			});
-		})
-		.then(function()
-		{
-			return logic.asyncLoop(units,function(name)
-			{
-				return new Promise(function(resolve,reject)
-				{
-					schema.unit.create({name},(err,obj)=>err?reject(err):resolve(obj));
-				});
-			});
-		})
+		output.collection(contacts,'contact')
+		.then(()=>output.collection(depts,'department'))
+		.then(()=>output.collection(units,'unit'))
 		.then(function()
 		{
 			var salt=bcrypt.genSaltSync(10);
@@ -138,21 +123,12 @@ output.newDatabase=function(url)
 			{
 				return new Promise(function(resolve,reject)
 				{
-					var hash=bcrypt.hashSync(user.password,salt);
-					user.password=hash;
-					console.log(user);
+					user.password=bcrypt.hashSync(user.password,salt);
 					schema.user.create(user,(err,obj)=>err?reject(err):resolve(obj));
 				});
 			});
 		})
-		.then(function()
-		{
-			return new Promise(function(resolve,reject)
-			{
-				//logic.json2mongo(logic.getDB());
-				resolve();
-			});
-		})
+		.then(()=>new Promise((resolve,reject)=>resolve()))//temp!!//logic.json2mongo(logic.getDB());
 		.then(()=>console.log('done!'))
 		.catch(()=>console.log('failed...'));
 		//create users
