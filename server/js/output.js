@@ -87,94 +87,76 @@ output.init=function(url)
 	.catch(output.error);
 };
 output.entry=(err,obj)=>err?output.error(err):console.log(obj.name);
+
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
 	var users=require('../data/users.json');
-	//output.json(url);	
-	fs.readFile(url+'/data/inventory.csv','utf8',function(err,data)
+	output.json(url);
+	.then(function(data)
 	{
-		if (err)
+		logic.setDB(data);
+		mongoose.connect('mongodb://localhost:27017/moco-ff');
+		var db=mongoose.connection;
+		db.on('error',output.error);
+		var json=logic.getDB();
+		var contacts=logic.uniqueEntries(json,'Contact Person');
+		var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
+		var units=logic.uniqueEntries(json,'Unit Number');	
+		//create collections
+		logic.asyncLoop(contacts,function(name)
 		{
-			output.error(err);
-		}
-		else
+			return new Promise(function(resolve,reject)
+			{
+				schema.contact.create({name},(err,obj)=>err?reject(err):resolve(obj));
+			});
+		})
+		.then(function()
 		{
-			logic.setDB(data);
-			mongoose.connect('mongodb://localhost:27017/moco-ff');
-			var db=mongoose.connection;
-			db.on('error',output.error);
-			var json=logic.getDB();
-			var contacts=logic.uniqueEntries(json,'Contact Person');
-			var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
-			var units=logic.uniqueEntries(json,'Unit Number');	
-			//create collections
-			logic.asyncLoop(contacts,function(name)
+			return logic.asyncLoop(depts,function(name)
 			{
 				return new Promise(function(resolve,reject)
 				{
-					schema.contact.create({name},(err,obj)=>err?reject(err):resolve(obj));
+					schema.department.create({name},(err,obj)=>err?reject(err):resolve(obj));
 				});
-			})
-			.then(function()
-			{
-				return logic.asyncLoop(depts,function(name)
-				{
-					return new Promise(function(resolve,reject)
-					{
-						schema.department.create({name},(err,obj)=>err?reject(err):resolve(obj));
-					});
-				});
-			})
-			.then(function()
-			{
-				return logic.asyncLoop(units,function(name)
-				{
-					return new Promise(function(resolve,reject)
-					{
-						schema.unit.create({name},(err,obj)=>err?reject(err):resolve(obj));
-					});
-				});
-			})
-			.then(function()
-			{
-				var salt=bcrypt.genSaltSync(10);
-				return logic.asyncLoop(users,function(user)
-				{
-					return new Promise(function(resolve,reject)
-					{
-						var hash=bcrypt.hashSync(user.password,salt);
-						user.password=hash;
-						console.log(user);
-						schema.user.create(user,function(err,obj)
-						{
-							
-							if (err)
-							{
-								console.error(err);
-								reject(err);
-							}
-							else
-							{
-								resolve(obj);
-							}
-						});
-					});
-				});
-			})
-			.then(function()
+			});
+		})
+		.then(function()
+		{
+			return logic.asyncLoop(units,function(name)
 			{
 				return new Promise(function(resolve,reject)
 				{
-					//logic.json2mongo(logic.getDB());
-					resolve();
+					schema.unit.create({name},(err,obj)=>err?reject(err):resolve(obj));
 				});
-			})
-			.then(()=>console.log('done!'))
-			.catch(()=>console.log('failed...'));
-			//create users
-			setTimeout(console.log,1000*60);
-		}
+			});
+		})
+		.then(function()
+		{
+			var salt=bcrypt.genSaltSync(10);
+			return logic.asyncLoop(users,function(user)
+			{
+				return new Promise(function(resolve,reject)
+				{
+					var hash=bcrypt.hashSync(user.password,salt);
+					user.password=hash;
+					console.log(user);
+					schema.user.create(user,(err,obj)=>err?reject(err):resolve(obj));
+				});
+			});
+		})
+		.then(function()
+		{
+			return new Promise(function(resolve,reject)
+			{
+				//logic.json2mongo(logic.getDB());
+				resolve();
+			});
+		})
+		.then(()=>console.log('done!'))
+		.catch(()=>console.log('failed...'));
+		//create users
+		setTimeout(console.log,1000*60);
 	});
 };
 logic.json2mongo=function(arr)
