@@ -98,6 +98,22 @@ output.collection=function(arr,collection)
 		});
 	});
 };
+output.cleanJSON=function(data)
+{
+	var {csv2json,renameProp,trim}=logic;
+	return csv2json(data)
+	.map(obj=>renameProp(obj,'Item','item'))
+	.map(obj=>renameProp(obj,'Description/Type','desc'))
+	.map(obj=>renameProp(obj,'Number On Hand','on-hand'))
+	.map(obj=>renameProp(obj,'Fire Department','department'))
+	.map(obj=>renameProp(obj,'Unit Number','unit'))
+	.map(obj=>renameProp(obj,'Contact Person','contact'))
+	.map(function(obj)
+	{
+		Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
+		return obj;
+	});
+};
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
@@ -106,23 +122,7 @@ output.newDatabase=function(url)
 	var db=mongoose.connection;
 	db.on('error',output.error);
 	output.json(url)
-	.then(function(data)
-	{
-		var {csv2json,renameProp,trim}=logic;
-		var json=csv2json(data)
-		.map(obj=>renameProp(obj,'Item','item'))
-		.map(obj=>renameProp(obj,'Description/Type','desc'))
-		.map(obj=>renameProp(obj,'Number On Hand','on-hand'))
-		.map(obj=>renameProp(obj,'Fire Department','department'))
-		.map(obj=>renameProp(obj,'Unit Number','unit'))
-		.map(obj=>renameProp(obj,'Contact Person','contact'))
-		.map(function(obj)
-		{
-			Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
-			return obj;
-		});		
-		return json;
-	})
+	.then(output.cleanJSON)
 	.then(function(json)
 	{
 		var contacts=logic.uniqueEntries(json,'contact');//fix redundant data!!
