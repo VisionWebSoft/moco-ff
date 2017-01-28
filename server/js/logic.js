@@ -75,3 +75,30 @@ logic.search=function(query)
 logic.setDB=data=>state.db=logic.csv2json(data);
 logic.trim=(str)=>str.trim().replace(/\s+/,' ');
 logic.unique=(val,i,arr)=>arr.indexOf(val)===i;
+logic.uniqueEntries=(arr,prop)=>arr.map(item=>logic.trim(item[prop]||'')).filter(logic.unique).filter(str=>str.length).sort();
+logic.val2link=function(obj,prop)
+{
+	return new Promise(function(resolve,reject)
+	{
+		if (obj[prop])
+		{
+			var query={name:obj[prop]};
+			schema[prop].findOne(query,function(err,match)
+			{
+				if (err)
+				{
+					reject(err);
+				}
+				else
+				{
+					obj[prop]=match._id;
+					resolve(obj);
+				}				
+			});
+		}
+		else
+		{
+			resolve(obj);
+		}
+	});
+};

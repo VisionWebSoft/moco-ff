@@ -9,34 +9,6 @@ mongoose.Promise=global.Promise;
 const path=require('path');
 //mongoose schemas
 const schema=require('./schema.js')
-logic.uniqueEntries=(arr,prop)=>arr.map(item=>logic.trim(item[prop]||'')).filter(logic.unique).filter(str=>str.length).sort();
-logic.val2link=function(obj,prop)
-{
-	return new Promise(function(resolve,reject)
-	{
-		if (obj[prop])
-		{
-			var query={name:obj[prop]};
-			schema[prop].findOne(query,function(err,match)
-			{
-				if (err)
-				{
-					console.log(err);
-					reject(err);
-				}
-				else
-				{
-					obj[prop]=match._id;
-					resolve(obj);
-				}				
-			});
-		}
-		else
-		{
-			resolve(obj);
-		}
-	});
-};
 global.output={};
 output.connect=function()
 {
@@ -98,27 +70,6 @@ output.collection=function(arr,collection)
 		});
 	});
 };
-logic.json2mongo=function(arr)//rewrite using async loop
-{
-	if (arr.length)
-	{
-		var obj=arr.pop();
-		Object.keys(obj).forEach(function(prop)
-		{
-			obj[prop]=logic.trim(obj[prop]);
-		});		
-		logic.val2link(obj,'contact')
-		.then(obj=>logic.val2link(obj,'department'))
-		.then(obj=>logic.val2link(obj,'unit'))
-		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
-		.then(()=>logic.json2mongo(arr))
-		.catch(output.error);
-	}
-	else
-	{
-		console.log('done!');
-	}
-};
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
@@ -155,6 +106,7 @@ output.newDatabase=function(url)
 			var {renameProp,trim,val2link}=logic;
 			return logic.asyncLoop(json,function(obj)
 			{
+				//move this code up to json declaration!!
 				Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
 				obj=renameProp(obj,'Item','item');
 				obj=renameProp(obj,'Description/Type','desc');
@@ -167,11 +119,7 @@ output.newDatabase=function(url)
 					val2link(obj,'contact')
 					.then(obj=>val2link(obj,'unit'))
 					.then(obj=>val2link(obj,'department'))
-					.then(obj=>schema.item.create(obj,function(err,obj)
-					{
-						console.log(obj);
-						err?reject(err):resolve(obj);
-					}));
+					.then(obj=>schema.item.create(obj,(err,obj)=>err?reject(err):resolve(obj)));
 				});
 			});
 		})
@@ -201,22 +149,4 @@ output.server=function(url,ip)
 	//init
 	app.use(output.errorPage);	
 	app.listen(80,logic.getNetworkIP());
-};
-output.zip=function(path,json)
-{
-	return new Promise(function(resolve,reject)
-	{
-		let zip=new Zip();
-		let opts=
-		{
-			compression:'DEFLATE',
-			type:'nodebuffer',
-			streamFiles:true
-		};
-		zip.file('database.json',JSON.stringify(json));
-		zip.generateNodeStream(opts).pipe(fs.createWriteStream(path)).on('finish',function(error)
-		{
-			(error?reject:resolve)();
-		});
-	});
 };
