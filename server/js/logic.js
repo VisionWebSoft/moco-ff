@@ -58,6 +58,15 @@ logic.match=function(query,entry)//simplify!!
 {
 	return entry?entry.toLowerCase().match(query.toLowerCase()):false;
 };
+logic.renameProp=function(obj,from,to)
+{
+	if (obj[from])
+	{
+		obj[to]=obj[from];
+		delete obj[from];
+	}
+	return obj;
+};
 logic.search=function(query)
 {
 	var props=Object.keys(query);//remove sort and focus!!

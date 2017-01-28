@@ -10,15 +10,14 @@ const path=require('path');
 //mongoose schemas
 const schema=require('./schema.js')
 logic.uniqueEntries=(arr,prop)=>arr.map(item=>logic.trim(item[prop]||'')).filter(logic.unique).filter(str=>str.length).sort();
-logic.val2link=function(obj,prop,collection)
+logic.val2link=function(obj,prop)
 {
-	console.log(obj);
 	return new Promise(function(resolve,reject)
 	{
 		if (obj[prop])
 		{
 			var query={name:obj[prop]};
-			schema[collection].findOne(query,function(err,match)
+			schema[prop].findOne(query,function(err,match)
 			{
 				if (err)
 				{
@@ -88,7 +87,7 @@ output.init=function(url)
 	})
 	.catch(output.error);
 };
-output.entry=(err,obj)=>err?output.error(err):console.log(obj.name);
+output.entry=(err,obj)=>err?output.error(err):console.log(obj);
 output.collection=function(arr,collection)
 {
 	return logic.asyncLoop(arr,function(name)
@@ -107,10 +106,10 @@ logic.json2mongo=function(arr)//rewrite using async loop
 		Object.keys(obj).forEach(function(prop)
 		{
 			obj[prop]=logic.trim(obj[prop]);
-		});
-		logic.val2link(obj,'Contact Person','contact')
-		.then(obj=>logic.val2link(obj,'Unit Number','unit'))
-		.then(obj=>logic.val2link(obj,'Fire Department','department'))
+		});		
+		logic.val2link(obj,'contact')
+		.then(obj=>logic.val2link(obj,'department'))
+		.then(obj=>logic.val2link(obj,'unit'))
 		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
 		.then(()=>logic.json2mongo(arr))
 		.catch(output.error);
@@ -151,49 +150,28 @@ output.newDatabase=function(url)
 				});
 			});
 		})
-		.catch(()=>console.log('uh oh...'))
 		.then(function()
 		{
+			var {renameProp,trim,val2link}=logic;
 			return logic.asyncLoop(json,function(obj)
 			{
+				Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
+				obj=renameProp(obj,'Item','item');
+				obj=renameProp(obj,'Description/Type','desc');
+				obj=renameProp(obj,'Number On Hand','on-hand');
+				obj=renameProp(obj,'Fire Department','department');
+				obj=renameProp(obj,'Unit Number','unit');
+				obj=renameProp(obj,'Contact Person','contact');
 				return new Promise(function(resolve,reject)
 				{
-					Object.keys(obj).forEach(prop=>obj[prop]=logic.trim(obj[prop]));
-					logic.val2link(obj,'Contact Person','contact')
-					.then(obj=>logic.val2link(obj,'Unit Number','unit'))
-					.then(obj=>logic.val2link(obj,'Fire Department','department'))
-					.then(function(obj)
+					val2link(obj,'contact')
+					.then(obj=>val2link(obj,'unit'))
+					.then(obj=>val2link(obj,'department'))
+					.then(obj=>schema.item.create(obj,function(err,obj)
 					{
-						//fix props
-						obj.item=obj.Item;
-						delete obj.Item;
-						if (obj['Description/Type'])
-						{
-							obj.desc=obj['Description/Type'];
-							delete obj['Description/Type'];
-						}
-						if (obj['Number On Hand'])
-						{
-							obj['on-hand']=obj['Number On Hand'];
-							delete obj['Number On Hand'];
-						}
-						if (obj['Fire Department'])
-						{
-							obj.department=obj['Fire Department'];
-							delete obj['Fire Department'];
-						}
-						if (obj['Unit Number'])
-						{
-							obj.unit=obj['Unit Number'];
-							delete obj['Unit Number'];
-						}
-						if (obj['Contact Person'])
-						{
-							obj.contact=obj['Contact Person'];
-							delete obj['Contact Person'];
-						}
-						schema.item.create(obj,(err,obj)=>err?reject(err):resolve(obj));
-					});
+						console.log(obj);
+						err?reject(err):resolve(obj);
+					}));
 				});
 			});
 		})
