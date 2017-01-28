@@ -98,27 +98,6 @@ output.collection=function(arr,collection)
 		});
 	});
 };
-logic.json2mongo=function(arr)//rewrite using async loop
-{
-	if (arr.length)
-	{
-		var obj=arr.pop();
-		Object.keys(obj).forEach(function(prop)
-		{
-			obj[prop]=logic.trim(obj[prop]);
-		});		
-		logic.val2link(obj,'contact')
-		.then(obj=>logic.val2link(obj,'department'))
-		.then(obj=>logic.val2link(obj,'unit'))
-		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
-		.then(()=>logic.json2mongo(arr))
-		.catch(output.error);
-	}
-	else
-	{
-		console.log('done!');
-	}
-};
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
@@ -201,22 +180,4 @@ output.server=function(url,ip)
 	//init
 	app.use(output.errorPage);	
 	app.listen(80,logic.getNetworkIP());
-};
-output.zip=function(path,json)
-{
-	return new Promise(function(resolve,reject)
-	{
-		let zip=new Zip();
-		let opts=
-		{
-			compression:'DEFLATE',
-			type:'nodebuffer',
-			streamFiles:true
-		};
-		zip.file('database.json',JSON.stringify(json));
-		zip.generateNodeStream(opts).pipe(fs.createWriteStream(path)).on('finish',function(error)
-		{
-			(error?reject:resolve)();
-		});
-	});
 };
