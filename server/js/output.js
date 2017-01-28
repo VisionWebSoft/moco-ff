@@ -101,15 +101,17 @@ output.collection=function(arr,collection)
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
+	mongoose.connect('mongodb://localhost:27017/moco-ff');
 	var users=require('../data/users.json');
+	var db=mongoose.connection;
+	db.on('error',output.error);
 	output.json(url)
 	.then(function(data)
 	{
-		logic.setDB(data);
-		mongoose.connect('mongodb://localhost:27017/moco-ff');
-		var db=mongoose.connection;
-		db.on('error',output.error);
-		var json=logic.getDB();
+		return logic.csv2json(data);
+	})
+	.then(function(json)
+	{			
 		var contacts=logic.uniqueEntries(json,'Contact Person');
 		var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
 		var units=logic.uniqueEntries(json,'Unit Number');	
@@ -119,11 +121,11 @@ output.newDatabase=function(url)
 		.then(()=>output.collection(units,'unit'))
 		.then(function()
 		{
-			var salt=bcrypt.genSaltSync(10);
 			return logic.asyncLoop(users,function(user)
 			{
 				return new Promise(function(resolve,reject)
 				{
+					var salt=bcrypt.genSaltSync(10);
 					user.password=bcrypt.hashSync(user.password,salt);
 					schema.user.create(user,(err,obj)=>err?reject(err):resolve(obj));
 				});
@@ -148,7 +150,7 @@ output.newDatabase=function(url)
 					.then(obj=>val2link(obj,'department'))
 					.then(obj=>schema.item.create(obj,function(err,obj)
 					{
-						console.log(obj);
+						//console.log(obj);
 						err?reject(err):resolve(obj);
 					}));
 				});
@@ -156,7 +158,6 @@ output.newDatabase=function(url)
 		})
 		.then(()=>console.log('done!'))
 		.catch(()=>console.log('failed...'));
-		//create users
 		setTimeout(console.log,1000*60);
 	});
 };
