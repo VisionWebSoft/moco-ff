@@ -27,7 +27,6 @@ var collections=
 	{
 		contact:
 		{
-			required:true,
 			type:ObjectId
 		},
 		desc:
@@ -37,14 +36,12 @@ var collections=
 		},
 		department:
 		{
-			required:true,
 			type:ObjectId
 		},
 		item:
 		{
-			required:true,
 			trim:true,
-			type:String,
+			type:String
 		},
 		'on-hand':
 		{
@@ -53,7 +50,6 @@ var collections=
 		},
 		unit:
 		{
-			required:true,
 			type:ObjectId
 		}
 	},
