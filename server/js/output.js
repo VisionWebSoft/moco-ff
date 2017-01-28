@@ -38,6 +38,32 @@ logic.val2link=function(obj,prop)
 	});
 };
 global.output={};
+output.cleanJSON=function(data)
+{
+	var {csv2json,renameProp,trim}=logic;
+	return csv2json(data)
+	.map(obj=>renameProp(obj,'Item','item'))
+	.map(obj=>renameProp(obj,'Description/Type','desc'))
+	.map(obj=>renameProp(obj,'Number On Hand','on-hand'))
+	.map(obj=>renameProp(obj,'Fire Department','department'))
+	.map(obj=>renameProp(obj,'Unit Number','unit'))
+	.map(obj=>renameProp(obj,'Contact Person','contact'))
+	.map(function(obj)
+	{
+		Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
+		return obj;
+	});
+};
+output.collection=function(arr,collection)
+{
+	return logic.asyncLoop(arr,function(name)
+	{
+		return new Promise(function(resolve,reject)
+		{
+			schema[collection].create({name},(err,obj)=>err?reject(err):resolve(obj));
+		});
+	});
+};
 output.connect=function()
 {
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
@@ -88,53 +114,25 @@ output.init=function(url)
 	.catch(output.error);
 };
 output.entry=(err,obj)=>err?output.error(err):console.log(obj);
-output.collection=function(arr,collection)
-{
-	return logic.asyncLoop(arr,function(name)
-	{
-		return new Promise(function(resolve,reject)
-		{
-			schema[collection].create({name},(err,obj)=>err?reject(err):resolve(obj));
-		});
-	});
-};
-output.cleanJSON=function(data)
-{
-	var {csv2json,renameProp,trim}=logic;
-	return csv2json(data)
-	.map(obj=>renameProp(obj,'Item','item'))
-	.map(obj=>renameProp(obj,'Description/Type','desc'))
-	.map(obj=>renameProp(obj,'Number On Hand','on-hand'))
-	.map(obj=>renameProp(obj,'Fire Department','department'))
-	.map(obj=>renameProp(obj,'Unit Number','unit'))
-	.map(obj=>renameProp(obj,'Contact Person','contact'))
-	.map(function(obj)
-	{
-		Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
-		return obj;
-	});
-};
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
 	var users=require('../data/users.json');
 	var db=mongoose.connection;
+	var {collection,cleanJSON}=output;
 	db.on('error',output.error);
 	output.json(url)
-	.then(output.cleanJSON)
+	.then(cleanJSON)
 	.then(function(json)
 	{
-		var contacts=logic.uniqueEntries(json,'contact');//fix redundant data!!
-		var depts=logic.uniqueEntries(json,'department');
-		var units=logic.uniqueEntries(json,'unit');
-		//create collections
-		output.collection(contacts,'contact')
-		.then(()=>output.collection(depts,'department'))
-		.then(()=>output.collection(units,'unit'))
+		var {asyncLoop,uniqueEntries,val2link}=logic;
+		collection(uniqueEntries(json,'contact'),'contact')
+		.then(()=>collection(uniqueEntries(json,'department'),'department'))
+		.then(()=>collection(uniqueEntries(json,'unit'),'unit'))
 		.then(function()
 		{
-			return logic.asyncLoop(users,function(user)
+			return asyncLoop(users,function(user)
 			{
 				return new Promise(function(resolve,reject)
 				{
@@ -146,8 +144,7 @@ output.newDatabase=function(url)
 		})
 		.then(function()
 		{
-			var {val2link}=logic;
-			return logic.asyncLoop(json,function(obj)
+			return asyncLoop(json,function(obj)
 			{
 				return new Promise(function(resolve,reject)
 				{
