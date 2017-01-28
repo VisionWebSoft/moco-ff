@@ -5,22 +5,24 @@ const compression=require('compression');
 const express=require('express');
 const fs=require('fs');
 const mongoose=require('mongoose');
+mongoose.Promise=global.Promise;
 const path=require('path');
 //mongoose schemas
 const schema=require('./schema.js')
 logic.uniqueEntries=(arr,prop)=>arr.map(item=>logic.trim(item[prop]||'')).filter(logic.unique).filter(str=>str.length).sort();
 logic.val2link=function(obj,prop,collection)
 {
+	console.log(obj);
 	return new Promise(function(resolve,reject)
 	{
 		if (obj[prop])
 		{
 			var query={name:obj[prop]};
-			console.log(query);
 			schema[collection].findOne(query,function(err,match)
 			{
 				if (err)
 				{
+					console.log(err);
 					reject(err);
 				}
 				else
@@ -97,6 +99,27 @@ output.collection=function(arr,collection)
 		});
 	});
 };
+logic.json2mongo=function(arr)//rewrite using async loop
+{
+	if (arr.length)
+	{
+		var obj=arr.pop();
+		Object.keys(obj).forEach(function(prop)
+		{
+			obj[prop]=logic.trim(obj[prop]);
+		});
+		logic.val2link(obj,'Contact Person','contact')
+		.then(obj=>logic.val2link(obj,'Unit Number','unit'))
+		.then(obj=>logic.val2link(obj,'Fire Department','department'))
+		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
+		.then(()=>logic.json2mongo(arr))
+		.catch(output.error);
+	}
+	else
+	{
+		console.log('done!');
+	}
+};
 output.newDatabase=function(url)
 {
 	mr.freeze(config,input,logic,output);
@@ -128,33 +151,57 @@ output.newDatabase=function(url)
 				});
 			});
 		})
-		.then(()=>new Promise((resolve,reject)=>resolve()))//temp!!//logic.json2mongo(logic.getDB());
+		.catch(()=>console.log('uh oh...'))
+		.then(function()
+		{
+			return logic.asyncLoop(json,function(obj)
+			{
+				return new Promise(function(resolve,reject)
+				{
+					Object.keys(obj).forEach(prop=>obj[prop]=logic.trim(obj[prop]));
+					logic.val2link(obj,'Contact Person','contact')
+					.then(obj=>logic.val2link(obj,'Unit Number','unit'))
+					.then(obj=>logic.val2link(obj,'Fire Department','department'))
+					.then(function(obj)
+					{
+						//fix props
+						obj.item=obj.Item;
+						delete obj.Item;
+						if (obj['Description/Type'])
+						{
+							obj.desc=obj['Description/Type'];
+							delete obj['Description/Type'];
+						}
+						if (obj['Number On Hand'])
+						{
+							obj['on-hand']=obj['Number On Hand'];
+							delete obj['Number On Hand'];
+						}
+						if (obj['Fire Department'])
+						{
+							obj.department=obj['Fire Department'];
+							delete obj['Fire Department'];
+						}
+						if (obj['Unit Number'])
+						{
+							obj.unit=obj['Unit Number'];
+							delete obj['Unit Number'];
+						}
+						if (obj['Contact Person'])
+						{
+							obj.contact=obj['Contact Person'];
+							delete obj['Contact Person'];
+						}
+						schema.item.create(obj,(err,obj)=>err?reject(err):resolve(obj));
+					});
+				});
+			});
+		})
 		.then(()=>console.log('done!'))
 		.catch(()=>console.log('failed...'));
 		//create users
 		setTimeout(console.log,1000*60);
 	});
-};
-logic.json2mongo=function(arr)
-{
-	if (arr.length)
-	{
-		var obj=arr.pop();
-		Object.keys(obj).forEach(function(prop)
-		{
-			obj[prop]=logic.trim(obj[prop]);
-		});
-		logic.val2link(obj,'Contact Person','contact')
-		.then(obj=>logic.val2link(obj,'Unit Number','unit'))
-		.then(obj=>logic.val2link(obj,'Fire Department','department'))
-		.then(obj=>schema.item.create(obj,(err,obj)=>err?output.error(err):console.log(obj.name)))
-		.then(()=>logic.json2mongo(arr))
-		.catch(output.error);
-	}
-	else
-	{
-		console.log('done!');
-	}
 };
 output.server=function(url,ip)
 {
