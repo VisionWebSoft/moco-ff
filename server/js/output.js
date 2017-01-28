@@ -108,13 +108,26 @@ output.newDatabase=function(url)
 	output.json(url)
 	.then(function(data)
 	{
-		return logic.csv2json(data);
+		var {csv2json,renameProp,trim}=logic;
+		var json=csv2json(data)
+		.map(obj=>renameProp(obj,'Item','item'))
+		.map(obj=>renameProp(obj,'Description/Type','desc'))
+		.map(obj=>renameProp(obj,'Number On Hand','on-hand'))
+		.map(obj=>renameProp(obj,'Fire Department','department'))
+		.map(obj=>renameProp(obj,'Unit Number','unit'))
+		.map(obj=>renameProp(obj,'Contact Person','contact'))
+		.map(function(obj)
+		{
+			Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
+			return obj;
+		});		
+		return json;
 	})
 	.then(function(json)
-	{			
-		var contacts=logic.uniqueEntries(json,'Contact Person');
-		var depts=logic.uniqueEntries(json,'Fire Department');//fix redundant data!!
-		var units=logic.uniqueEntries(json,'Unit Number');	
+	{
+		var contacts=logic.uniqueEntries(json,'contact');//fix redundant data!!
+		var depts=logic.uniqueEntries(json,'department');
+		var units=logic.uniqueEntries(json,'unit');
 		//create collections
 		output.collection(contacts,'contact')
 		.then(()=>output.collection(depts,'department'))
@@ -133,16 +146,9 @@ output.newDatabase=function(url)
 		})
 		.then(function()
 		{
-			var {renameProp,trim,val2link}=logic;
+			var {val2link}=logic;
 			return logic.asyncLoop(json,function(obj)
 			{
-				Object.keys(obj).forEach(prop=>obj[prop]=trim(obj[prop]));
-				obj=renameProp(obj,'Item','item');
-				obj=renameProp(obj,'Description/Type','desc');
-				obj=renameProp(obj,'Number On Hand','on-hand');
-				obj=renameProp(obj,'Fire Department','department');
-				obj=renameProp(obj,'Unit Number','unit');
-				obj=renameProp(obj,'Contact Person','contact');
 				return new Promise(function(resolve,reject)
 				{
 					val2link(obj,'contact')
@@ -150,7 +156,7 @@ output.newDatabase=function(url)
 					.then(obj=>val2link(obj,'department'))
 					.then(obj=>schema.item.create(obj,function(err,obj)
 					{
-						//console.log(obj);
+						console.log(obj);
 						err?reject(err):resolve(obj);
 					}));
 				});
