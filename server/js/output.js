@@ -68,9 +68,12 @@ logic.mongo2json=function(contacts,depts,items,units)
 {
 	
 };
-output.mongoQuery=function()
+output.mongoQuery=function(collection)
 {
-	
+	return new Promise(function(resolve,reject)
+	{
+		schema[collection].find((err,arr)=>err?reject(err):resolve(arr));
+	});
 };
 output.connect=function()
 {
@@ -80,78 +83,24 @@ output.connect=function()
 	db.once('open',function()
 	{
 		console.log('connected');
-		var inProgress=4;//number of groups
 		var contacts=[];
 		var depts=[];
 		var items=[];
 		var units=[];
-		schema.contact.find(function(err,arr)
+		var inProgress=4;//number of groups
+		var done=function()
 		{
-			if (err)
+			inProgress-=1;
+			if (inProgress)
 			{
-				output.error(err);
+				
 			}
-			else
-			{
-				contacts=arr;
-				inProgress-=1;
-				if (!inProgress)
-				{
-					logic.mongo2json(contacts,depts,items,units);
-				}
-			}
-		});
-		schema.department.find(function(err,arr)
-		{
-			if (err)
-			{
-				output.error(err);
-			}
-			else
-			{
-				depts=arr;
-				inProgress-=1;
-				if (!inProgress)
-				{
-					logic.mongo2json(contacts,depts,items,units);
-				}
-			}
-		});
-		schema.item.find(function(err,arr)
-		{
-			if (err)
-			{
-				output.error(err);
-			}
-			else
-			{
-				items=arr;
-				inProgress-=1;
-				if (!inProgress)
-				{
-					logic.mongo2json(contacts,depts,items,units);
-				}
-			}
-		});
-		schema.unit.find(function(err,arr)
-		{
-			if (err)
-			{
-				output.error(err);
-			}
-			else
-			{
-				units=arr;
-				inProgress-=1;
-				if (!inProgress)
-				{
-					logic.mongo2json(contacts,depts,items,units);
-				}
-			}
-		});
-	});   
-	
-	
+		};
+		output.mongoQuery('contact').then(arr=>contacts=arr).then(done).catch(output.error);
+		output.mongoQuery('department').then(arr=>depts=arr).then(done).catch(output.error);
+		output.mongoQuery('item').then(arr=>items=arr).then(done).catch(output.error);
+		output.mongoQuery('unit').then(arr=>units=arr).then(done).catch(output.error);
+	});
 /*	bcrypt.compare("1longPassPhrase!",hash).then(function(res)
 	{
 		console.log(res);//boolean
