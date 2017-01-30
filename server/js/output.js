@@ -244,7 +244,6 @@ output.newDatabase=function(url)
 		})
 		.then(()=>console.log('done!'))
 		.catch(()=>console.log('failed...'));
-		setTimeout(console.log,1000*60);
 	});
 };
 output.server=function(url,ip)
