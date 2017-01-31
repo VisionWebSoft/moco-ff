@@ -66,13 +66,20 @@ output.collection=function(arr,collection)
 };
 logic.mongo2json=function(contacts,depts,items,units)
 {
-	console.log(contacts);
-	return items.map(function(item)
+	contacts=logic.collection2obj(contacts);//this block changes the object type, bad for perf!!
+	depts=logic.collection2obj(depts);
+	units=logic.collection2obj(units);
+	return items.map(function(item,i,arr,contact=item.contact,dept=item.department,unit=item.unit)
 	{
+		contact?item.contact=contacts[contact]:'';
+		dept?item.department=depts[dept]:'';
+		unit?item.unit=units[unit]:'';
+		delete item.__v;
+		delete item._id;
 		return item;
 	});
 };
-logic.collection2obj=function(arr)
+logic.collection2obj=function(arr)//this type of structure is more efficient and should be used in the database?!!
 {
 	var obj={};
 	arr.forEach(item=>obj[item._id]=item.name);
@@ -82,13 +89,14 @@ output.mongoQuery=function(collection)
 {
 	return new Promise(function(resolve,reject)
 	{
-		schema[collection].find((err,arr)=>err?reject(err):resolve(arr));
+		schema[collection].find().lean().exec((err,arr)=>err?reject(err):resolve(arr));
 	});
 };
 output.connect=function()
 {
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
 	var db=mongoose.connection;
+	var {error,mongoQuery}=output;
 	db.on('error',output.error);	
 	db.once('open',function()
 	{
@@ -105,12 +113,13 @@ output.connect=function()
 			if (!inProgress)
 			{
 				var json=logic.mongo2json(contacts,depts,items,units);
+				console.log(json[0]);
 			}
 		};
-		output.mongoQuery('contact').then(arr=>contacts=arr).then(done).catch(output.error);
-		output.mongoQuery('department').then(arr=>depts=arr).then(done).catch(output.error);
-		output.mongoQuery('item').then(arr=>items=arr).then(done).catch(output.error);
-		output.mongoQuery('unit').then(arr=>units=arr).then(done).catch(output.error);
+		mongoQuery('contact').then(arr=>contacts=arr).then(done).catch(error);
+		mongoQuery('department').then(arr=>depts=arr).then(done).catch(error);
+		mongoQuery('item').then(arr=>items=arr).then(done).catch(error);
+		mongoQuery('unit').then(arr=>units=arr).then(done).catch(error);
 	});
 /*	bcrypt.compare("1longPassPhrase!",hash).then(function(res)
 	{
