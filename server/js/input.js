@@ -45,6 +45,18 @@ input.post.search=function(req,res)
 input.post.login=function(req,res)
 {
 	var {user,password}=req.body;
-	console.log(user+': '+password);
-	res.json({});
+	var start=Date.now();
+	output.auth(user,password)
+	.then(function(bool)
+	{
+		console.log(bool);
+		console.log(Date.now()-start);
+		res.json({});
+	})
+	.catch(function(error)
+	{
+		console.log(error);
+		output.error(error);
+		res.json({error});
+	});
 };

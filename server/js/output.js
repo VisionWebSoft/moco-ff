@@ -38,6 +38,27 @@ logic.val2link=function(obj,prop)
 	});
 };
 global.output={};
+output.auth=function(name,password)
+{
+	return new Promise(function(resolve,reject)
+	{
+		output.mongoQuery('user')
+		.then(users=>users.find(user=>user.name===name))
+		.then(user=>user?user.password:undefined)
+		.then(function(hash)
+		{
+			if (hash)
+			{
+				bcrypt.compare(password,hash)
+				.then(resolve).catch(reject);
+			}
+			else
+			{
+				reject('Invalid user name.');
+			}
+		});
+	});
+};
 output.cleanJSON=function(data)
 {
 	var {csv2json,renameProp,trim}=logic;
@@ -97,7 +118,7 @@ output.connect=function()
 	mongoose.connect('mongodb://localhost:27017/moco-ff');
 	var db=mongoose.connection;
 	var {error,mongoQuery}=output;
-	db.on('error',output.error);	
+	db.on('error',output.error);
 	db.once('open',function()
 	{
 		console.log('connected');
@@ -121,15 +142,6 @@ output.connect=function()
 		mongoQuery('item').then(arr=>items=arr).then(done).catch(error);
 		mongoQuery('unit').then(arr=>units=arr).then(done).catch(error);
 	});
-/*	bcrypt.compare("1longPassPhrase!",hash).then(function(res)
-	{
-		console.log(res);//boolean
-		console.log(Date.now()-start);
-	}).catch(output.error);*/
-	/*bcrypt.compare("B4c0/\/",hash).then(function(res)
-	{
-		console.log(res);//boolean
-	}).catch(output.error);*/
 };
 output.error=function(err)
 {
