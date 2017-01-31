@@ -47,16 +47,10 @@ input.post.login=function(req,res)
 	var {user,password}=req.body;
 	var start=Date.now();
 	output.auth(user,password)
-	.then(function(bool)
+	.then(function(auth)
 	{
-		console.log(bool);
 		console.log(Date.now()-start);
-		res.json({});
+		res.json({auth});
 	})
-	.catch(function(error)
-	{
-		console.log(error);
-		output.error(error);
-		res.json({error});
-	});
+	.catch(error=>res.json({error}));
 };
