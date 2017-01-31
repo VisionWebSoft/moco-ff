@@ -42,3 +42,9 @@ input.post.search=function(req,res)
 {
 	res.json(logic.search(req.body));
 };
+input.post.login=function(req,res)
+{
+	var {user,password}=req.body;
+	console.log(user+': '+password);
+	res.json({});
+};
