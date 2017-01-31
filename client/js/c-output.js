@@ -2,6 +2,7 @@
 output.eventlisteners=function()
 {
 	q('.close').on('click',input.close);
+	q('.login__btn').on('click',input.login);
 };
 output.fields=function(arr)
 {

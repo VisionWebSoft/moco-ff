@@ -3,6 +3,21 @@ input.close=function(event)
 {
 	q(event.target).parent('.banner,.modal').hide();
 };
+input.login=function(event)
+{
+	event.preventDefault();
+	var target=q(event.target);
+	var form=target.parent('form');
+	var obj=
+	{
+		data:
+		{
+			password:form.q('.password').val()+'',
+			user:form.q('.user').val()+''
+		}
+	};
+	output.req('api/login/',obj).then(console.log);
+};
 input.openModal=function(event)
 {
 	var btn=q(event.target);
