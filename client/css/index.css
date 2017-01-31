@@ -3,7 +3,16 @@
 @import 'button.css';
 /*modules*/
 @import 'header-footer.css';
+@import 'login.css';
 /*layout*/
+.modal
+{
+	height:100%;
+	left:0;
+	position:fixed;
+	top:0;
+	width:100%;
+}
 .table {
 	height: calc(100% - 3rem);
 }
@@ -31,10 +40,7 @@
 	flex-grow:2;
 }
 .search {
-	border: 0;
-	border-radius: 0;
 	height: 100%;
-	padding: 0;
 	width: calc(100% - 2rem);
 }
 .sort-toggle-button {
