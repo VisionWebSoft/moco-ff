@@ -66,7 +66,11 @@ output.collection=function(arr,collection)
 };
 logic.mongo2json=function(contacts,depts,items,units)
 {
-	
+	console.log(contacts);
+	return items.map(function(item)
+	{
+		return item;
+	});
 };
 output.mongoQuery=function(collection)
 {
@@ -83,6 +87,7 @@ output.connect=function()
 	db.once('open',function()
 	{
 		console.log('connected');
+		var collections=['contact','department','item','unit'];
 		var contacts=[];
 		var depts=[];
 		var items=[];
@@ -91,9 +96,10 @@ output.connect=function()
 		var done=function()
 		{
 			inProgress-=1;
-			if (inProgress)
+			if (!inProgress)
 			{
 				
+				var json=logic.mongo2json(contacts,depts,items,units);
 			}
 		};
 		output.mongoQuery('contact').then(arr=>contacts=arr).then(done).catch(output.error);
