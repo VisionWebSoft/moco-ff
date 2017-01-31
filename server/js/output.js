@@ -72,6 +72,12 @@ logic.mongo2json=function(contacts,depts,items,units)
 		return item;
 	});
 };
+logic.collection2obj=function(arr)
+{
+	var obj={};
+	arr.forEach(item=>obj[item._id]=item.name);
+	return obj;
+};
 output.mongoQuery=function(collection)
 {
 	return new Promise(function(resolve,reject)
@@ -98,7 +104,6 @@ output.connect=function()
 			inProgress-=1;
 			if (!inProgress)
 			{
-				
 				var json=logic.mongo2json(contacts,depts,items,units);
 			}
 		};
