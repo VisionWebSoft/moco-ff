@@ -51,7 +51,7 @@ output.query=function()
 	});
 	return obj;
 };
-output.results=function(arr,sortedProp='Item')
+output.results=function(arr,sortedProp='item')
 {
 	var props=logic.getKeys();
 	var list=q('dl').html('');
