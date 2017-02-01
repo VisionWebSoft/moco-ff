@@ -72,6 +72,7 @@ logic.search=function(query)
 	var props=Object.keys(query);//remove sort and focus!!
 	return logic.clone(state.db).filter(item=>props.every(prop=>logic.match(query[prop],item[prop])));//add sort function here!!
 };
-logic.setDB=data=>state.db=logic.csv2json(data);
+logic.setDB=data=>state.db=data;
+logic.setKeys=keys=>state.keys=keys;
 logic.trim=(str)=>str.trim().replace(/\s+/,' ');
 logic.unique=(val,i,arr)=>arr.indexOf(val)===i;

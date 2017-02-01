@@ -133,8 +133,12 @@ output.connect=function()
 			inProgress-=1;
 			if (!inProgress)
 			{
-				var json=logic.mongo2json(contacts,depts,items,units);
-				console.log(json[0]);
+				let arr=logic.mongo2json(contacts,depts,items,units);
+				let keys={};
+				arr.forEach(obj=>Object.keys(obj).forEach(key=>keys[key]=true));
+				logic.setKeys(Object.keys(keys));
+				logic.setDB(arr);
+				console.log(arr.length);
 			}
 		};
 		mongoQuery('contact').then(arr=>contacts=arr).then(done).catch(error);
@@ -165,17 +169,11 @@ output.json=function(url)
 };
 output.init=function(url)
 {
+	var ip=logic.getNetworkIP();
 	mr.freeze(config,input,logic,output);
-	output.json(url)
-	.then(function(data)
-	{
-		logic.setDB(data);
-		let ip=logic.getNetworkIP();
-		console.log(ip);
-		output.server(url,ip);
-		output.connect();
-	})
-	.catch(output.error);
+	console.log(ip);
+	output.server(url,ip);
+	output.connect();
 };
 output.entry=(err,obj)=>err?output.error(err):console.log(obj);
 output.newDatabase=function(url)
