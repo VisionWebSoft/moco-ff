@@ -40,6 +40,8 @@ input.get.database=function(req,res)//remove?!!
 };
 input.post.search=function(req,res)
 {
+	console.log(req.sessionID);
+	console.log(req.session);
 	res.json(logic.search(req.body));
 };
 input.post.login=function(req,res)
@@ -49,8 +51,9 @@ input.post.login=function(req,res)
 	output.auth(user,password)
 	.then(function(auth)
 	{
-		console.log(Date.now()-start);
+		req.session.user=user;
+		req.session.time=Date.now();
 		res.json({auth});
 	})
-	.catch(error=>res.json({error}));
+	.catch(error=>res.json({auth:false,error}));
 };
