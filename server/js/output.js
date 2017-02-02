@@ -6,6 +6,7 @@ const express=require('express');
 const session=require('express-session');
 const fs=require('fs');
 const mongoose=require('mongoose');
+const MongoDBStore=require('connect-mongodb-session')(session);
 mongoose.Promise=global.Promise;
 const path=require('path');
 //mongoose schemas
@@ -50,8 +51,8 @@ output.auth=function(name,password)
 		{
 			if (hash)
 			{
-				bcrypt.compare(password,hash)
-				.then(resolve).catch(reject);
+				bcrypt.compare(password,hash)//wrong username not tirggering...!!
+				.then((bool)=>bool?resolve(bool):reject('Wrong user name or password.')).catch(reject);
 			}
 			else
 			{
@@ -229,15 +230,28 @@ output.newDatabase=function(url)
 output.server=function(url,ip)
 {
 	var app=express();
+	var store=new MongoDBStore(
+	{
+		uri:'mongodb://localhost:27017/moco-ff-sessions',
+		collection:'session'
+	});
+	store.on('error',function(error)//edit this?!!
+	{
+		console.log(error);
+	});
 	//middleware
-	app.use(bodyParser.json({limit:'1mb'}));
-	app.use(compression());
-	app.use(session(
+	app.use(session)(//new code
 	{
 		secret:require('../data/secret.json').secret,
-		resave:true,
-		saveUninitialized:false
-	}));//put sessions stores in mongodb!!
+		cookie:
+		{
+			maxAge:1000*60*60*12//12hrs 
+		},
+		store:store,
+		resave:true
+	});
+	app.use(bodyParser.json({limit:'1mb'}));
+	app.use(compression());
 	app.use(function(req,res,next)//cors support for thumbnails
 	{
 		res.header('Access-Control-Allow-Origin','*');
@@ -250,6 +264,7 @@ output.server=function(url,ip)
 	//api
 	app.all('/api/:route/',input.router);
 	//init
+
 	app.use(output.errorPage);	
 	app.listen(80,logic.getNetworkIP());
 };

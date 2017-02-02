@@ -9,6 +9,7 @@
 		"bcryptjs":"~2.x.x",
 		"body-parser":"~1.x.x",
 		"compression":"~1.x.x",
+		"connect-mongodb-session":"~1.x.x",
 		"express":"~4.x.x",
 		"express-session":"~1.x.x",
 		"mongoose":"~4.x.x",
