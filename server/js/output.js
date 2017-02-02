@@ -3,6 +3,7 @@ const bodyParser=require('body-parser');
 const bcrypt=require('bcryptjs');
 const compression=require('compression');
 const express=require('express');
+const session=require('express-session');
 const fs=require('fs');
 const mongoose=require('mongoose');
 mongoose.Promise=global.Promise;
@@ -231,6 +232,12 @@ output.server=function(url,ip)
 	//middleware
 	app.use(bodyParser.json({limit:'1mb'}));
 	app.use(compression());
+	app.use(session(
+	{
+		secret:require('../data/secret.json').secret,
+		resave:true,
+		saveUninitialized:false
+	}));//put sessions stores in mongodb!!
 	app.use(function(req,res,next)//cors support for thumbnails
 	{
 		res.header('Access-Control-Allow-Origin','*');
