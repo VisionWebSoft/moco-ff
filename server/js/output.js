@@ -56,7 +56,7 @@ output.auth=function(name,password)
 			}
 			else
 			{
-				reject('Invalid user name.');
+				reject('Wrong user name or password.');
 			}
 		});
 	});
