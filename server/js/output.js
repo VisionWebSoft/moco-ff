@@ -3,10 +3,8 @@ const bodyParser=require('body-parser');
 const bcrypt=require('bcryptjs');
 const compression=require('compression');
 const express=require('express');
-const session=require('express-session');
 const fs=require('fs');
 const mongoose=require('mongoose');
-const MongoDBStore=require('connect-mongodb-session')(session);
 mongoose.Promise=global.Promise;
 const path=require('path');
 //mongoose schemas
@@ -230,26 +228,7 @@ output.newDatabase=function(url)
 output.server=function(url,ip)
 {
 	var app=express();
-	var store=new MongoDBStore(
-	{
-		uri:'mongodb://localhost:27017/moco-ff-sessions',
-		collection:'session'
-	});
-	store.on('error',function(error)//edit this?!!
-	{
-		console.log(error);
-	});
 	//middleware
-	app.use(session)(//new code
-	{
-		secret:require('../data/secret.json').secret,
-		cookie:
-		{
-			maxAge:1000*60*60*12//12hrs 
-		},
-		store:store,
-		resave:true
-	});
 	app.use(bodyParser.json({limit:'1mb'}));
 	app.use(compression());
 	app.use(function(req,res,next)//cors support for thumbnails
