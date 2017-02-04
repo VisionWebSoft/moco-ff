@@ -4,6 +4,7 @@ const os=require('os');
 var state={};//don't expose state to other pages
 state.db=[];
 state.keys=[];
+state.sessions={};
 global.logic={};
 logic.asyncLoop=function(arr,func)
 {
@@ -54,7 +55,22 @@ logic.getNetworkIP=function()//if there are multiple IPs, this returns the first
 	}
 	return addresses[0];
 };
-logic.match=function(query,entry)//simplify!!
+logic.login=ip=>state.sessions[ip]=Date.now();
+logic.loggedIn=function(ip)
+{
+	var sessions=state.sessions;
+	var now=Date.now();
+	Object.keys(sessions).forEach(function(session)
+	{
+		if (sessions[session]>=now)
+		{
+			delete sessions[session];
+		}
+	});
+	console.log(sessions);
+	return !!sessions[ip];//convert time to bool
+};
+logic.match=function(query,entry)//simplify!!!
 {
 	return entry?entry.toLowerCase().match(query.toLowerCase()):false;
 };
