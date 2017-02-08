@@ -33,12 +33,26 @@ input.post={};
 input.get.keywords=function(req,res)
 {
 	res.json(logic.getKeywords());
+	//res.json(logic.loggedIn(req.ip)?logic.getKeywords():{error:'Not logged in.'});
 };
-input.get.database=function(req,res)
+/*input.get.database=function(req,res)//remove?!!
 {
-	res.json(logic.getDB());
-};
+	res.json(logic.loggedIn(req.ip)?logic.getDB():{error:'Not logged in.'});
+};*/
 input.post.search=function(req,res)
 {
-	res.json(logic.search(req.body));
+	console.log(req.body);
+	console.log(logic.loggedIn(req.ip));
+	res.json(logic.loggedIn(req.ip)?logic.search(req.body):{"error":"Not logged in."});
+};
+input.post.login=function(req,res)
+{
+	var {user,password}=req.body;
+	output.auth(user,password)
+	.then(function(auth)
+	{
+		logic.login(req.ip);
+		res.json({auth});
+	})
+	.catch(error=>res.json({auth:false,error}));
 };

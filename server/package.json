@@ -6,6 +6,7 @@
 	"dependencies":
 	{
 		"ajv":"~4.x.x",
+		"bcryptjs":"~2.x.x",
 		"body-parser":"~1.x.x",
 		"compression":"~1.x.x",
 		"express":"~4.x.x",

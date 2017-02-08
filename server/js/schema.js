@@ -1,0 +1,87 @@
+var mongoose=require('mongoose');
+var schema={};
+var ObjectId=mongoose.Schema.Types.ObjectId;
+var collections=
+{
+	contact:
+	{
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String,
+			unique:true
+		}
+	},
+	department:
+	{
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String,
+			unique:true
+		}
+	},
+	item:
+	{
+		contact:
+		{
+			type:ObjectId
+		},
+		desc:
+		{
+			trim:true,
+			type:String,
+		},
+		department:
+		{
+			type:ObjectId
+		},
+		item:
+		{
+			trim:true,
+			type:String
+		},
+		'on-hand':
+		{
+			trim:true,
+			type:String,
+		},
+		unit:
+		{
+			type:ObjectId
+		}
+	},
+	unit:
+	{
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String,
+			unique:true
+		}
+	},
+	user:
+	{
+		name:
+		{
+			required:true,
+			trim:true,
+			type:String,
+			unique:true
+		},
+		password://must encypt this!!
+		{
+			required:true,
+			type:String
+		}
+	}
+};
+Object.keys(collections).forEach(function(collection)
+{
+	var val=new mongoose.Schema(collections[collection]);
+	schema[collection]=mongoose.model(collection,val);
+});
+module.exports=schema;

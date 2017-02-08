@@ -1,6 +1,6 @@
-server/node_modules/
 *.bat
-*.csv
-err.out
 *.zip
+server/node_modules/
+server/data/
+err.out
 todo.txt
