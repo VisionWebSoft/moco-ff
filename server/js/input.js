@@ -41,8 +41,6 @@ input.get.keywords=function(req,res)
 };*/
 input.post.search=function(req,res)
 {
-	console.log(req.body);
-	console.log(logic.loggedIn(req.ip));
 	res.json(logic.loggedIn(req.ip)?logic.search(req.body):{"error":"Not logged in."});
 };
 input.post.login=function(req,res)
