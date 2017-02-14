@@ -86,7 +86,7 @@ logic.renameProp=function(obj,from,to)
 logic.search=function(query)
 {
 	var props=Object.keys(query);//remove sort and focus!!
-	return logic.clone(state.db).filter(item=>props.every(prop=>logic.match(query[prop],item[prop])));//add sort function here!!
+	return logic.clone(state.db).filter(item=>props.every(prop=>logic.match(query[prop],item[prop]))).reverse();//add sort function here!!
 };
 logic.setDB=data=>state.db=data;
 logic.setKeys=keys=>state.keys=keys;
