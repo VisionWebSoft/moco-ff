@@ -1,98 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Login page </title>
-		<!-- ================================================= -->
-		<!--				 STYLESHEET						-->
-		<!-- ================================================= -->
-		<!-- Bootstrap Core -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<!-- Roboto Font -->
-		<link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300,500" rel="stylesheet" type="text/css">
-		<!-- Admin Core -->
-		<link href="css/nifty.min.css" rel="stylesheet">
-		<!--Page load progress bar -->
-		<script src="js/pace.min.js"></script>
-	</head>
-	<body>
-		<div id="container" class="cls-container">
-			<!-- BACKGROUND IMAGE -->
-			<!--===================================================-->
-			<div class="bg-img img-balloon" id="bg-overlay" style="background-image: url(&quot;img/bg-img/bg-img-2.jpg&quot;);"></div>
-			<!-- HEADER -->
-			<!--===================================================-->
-			<div class="cls-header cls-header-lg">
-				<div class="cls-brand">
-					<a class="box-inline" href="javascript:">
-							 <img alt="" src="img/logov2.png" class="brand-icon"> 
-<!--						<span class="brand-title">MCEMA <span class="text-thin"></span></span>-->
-					</a>
-				</div>
-			</div>
-			<!-- LOGIN FORM -->
-			<!--===================================================-->
-			<div class="cls-content">
-				<div class="cls-content-sm panel">
-					<div class="panel-body">
-						<p class="pad-btm">Sign In to your account</p>
-						<form> 
-							
-								<div class="alert alert-danger fade in">
-									<button data-dismiss="alert" class="close"><span>×</span></button>
-									<strong>Oh snap!</strong> Please enter correct username or password.
-								</div>
-							
-							
-								<div class="alert alert-info fade in">
-									<button data-dismiss="alert" class="close"><span>×</span></button>
-									<strong>Logout!</strong> To continue please login here..
-								</div>
-							
-							<div class="form-group">
-								<div class="input-group">
-									<div class="input-group-addon"><i class="fa fa-user"></i></div>
-									<input type="text" name="uname" class="form-control" placeholder="Username">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="input-group">
-									<div class="input-group-addon"><i class="fa fa-asterisk"></i></div>
-									<input type="password" name="password" class="form-control" placeholder="Password">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-4">
-									<div class="form-group text-right">
-										<button class="btn btn-success text-uppercase" name="submit" type="submit">Log In</button>
-									</div>
-								</div>
-							</div>
-	 </form>
-					</div>
-				</div>
-			</div>
-			<!--===================================================-->
-			<!-- END OF LOGIN FORM -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login page </title>
+<!-- ================================================= -->
+<!--				 STYLESHEET						-->
+<!-- ================================================= -->
+<!-- Bootstrap Core -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- Roboto Font -->
+<link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300,500" rel="stylesheet" type="text/css">
+<!-- Admin Core -->
+<link href="css/nifty.min.css" rel="stylesheet">
+<!--Page load progress bar -->
+<script src="js/pace.min.js"></script>
+<div id="container" class="cls-container">
+	<!-- BACKGROUND IMAGE -->
+	<!--===================================================-->
+	<div class="bg-img img-balloon" id="bg-overlay" style="background-image: url(&quot;img/bg-img/bg-img-2.jpg&quot;);"></div>
+	<!-- HEADER -->
+	<!--===================================================-->
+	<div class="cls-header cls-header-lg">
+		<div class="cls-brand">
+			<a class="box-inline" href="javascript:">
+				<img alt="" src="img/logov2.png" class="brand-icon"> 
+<!--					<span class="brand-title">MCEMA <span class="text-thin"></span></span>-->
+			</a>
 		</div>
-		<!--===================================================-->
-		<!-- END OF CONTAINER -->
-		<!--===================================================-->
-		<!--				 JAVASCRIPT						-->
-		<!--===================================================-->
-		<!-- MAIN PLUGIN -->
-		<!-- ================================================= -->
-		<!-- jQuery Version 2.1.1 -->
-		<script src="js/jquery-2.1.1.min.js"></script>
-		<!-- Bootstrap Core JavaScript -->
-		<script src="js/bootstrap.min.js"></script>
-		<!-- ================================================= -->
-		<!-- ADMIN PLUGIN & DEMO -->
-		<!-- ================================================= -->
-		<!-- Admin Core -->
-		<script src="js/nifty.min.js"></script>
-		<!-- Demo JavaScript -->
-		<script src="js/demo/bg-images.js"></script>
-	</body>
-</html>
+	</div>
+	<!-- LOGIN FORM -->
+	<!--===================================================-->
+	<div class="cls-content">
+		<div class="cls-content-sm panel">
+			<div class="panel-body">
+				<p class="pad-btm">Sign In to your account</p>
+				<form> 
+					<div class="alert alert-danger fade in">
+						<button data-dismiss="alert" class="close"><span>×</span></button>
+						<strong>Oh snap!</strong> Please enter correct username or password.
+					</div>
+
+
+					<div class="alert alert-info fade in">
+						<button data-dismiss="alert" class="close"><span>×</span></button>
+						<strong>Logout!</strong> To continue please login here..
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon"><i class="fa fa-user"></i></div>
+							<input type="text" name="uname" class="form-control" placeholder="Username">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon"><i class="fa fa-asterisk"></i></div>
+							<input type="password" name="password" class="form-control" placeholder="Password">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-4">
+							<div class="form-group text-right">
+								<button class="btn btn-success text-uppercase" name="submit" type="submit">Log In</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!--===================================================-->
+	<!-- END OF LOGIN FORM -->
+</div>
+<!--===================================================-->
+<!-- END OF CONTAINER -->
+<!--===================================================-->
+<!--				 JAVASCRIPT						-->
+<!--===================================================-->
+<!-- MAIN PLUGIN -->
+<!-- ================================================= -->
+<!-- jQuery Version 2.1.1 -->
+<script src="js/jquery-2.1.1.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<!-- ================================================= -->
+<!-- ADMIN PLUGIN & DEMO -->
+<!-- ================================================= -->
+<!-- Admin Core -->
+<script src="js/nifty.min.js"></script>
+<!-- Demo JavaScript -->
+<script src="js/demo/bg-images.js"></script>
