@@ -2,19 +2,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Login page</title>
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300,500" rel="stylesheet">
-<link href="css/nifty.min.css" rel="stylesheet"><!-- Admin Core -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,700,300,500">
+<link rel="stylesheet" href="css/nifty.min.css"><!-- Admin Core -->
 <script src="js/pace.min.js"></script><!--Page load progress bar -->
-<div id="container" class="cls-container">
+<aside id="container" class="cls-container">
 	<div class="bg-img img-balloon" id="bg-overlay" style="background-image: url(&quot;img/bg-img/bg-img-2.jpg&quot;);"></div>
-	<div class="cls-header cls-header-lg">
+	<header class="cls-header cls-header-lg">
 		<div class="cls-brand">
 			<a class="box-inline" href="javascript:">
 				<img alt="MCEMA Logo" src="img/logov2.png" class="brand-icon"> 
 			</a>
 		</div>
-	</div>
+	</header>
 	<div class="cls-content login-form"><!--added class .login-form!!-->
 		<div class="cls-content-sm panel">
 			<div class="panel-body">
@@ -40,18 +40,14 @@
 							<input type="password" name="password" class="form-control" placeholder="Password">
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-xs-4">
-							<div class="form-group text-right">
-								<button class="btn btn-success text-uppercase" name="submit" type="submit">Log In</button>
-							</div>
-						</div>
+					<div class="col-xs-4 form-group">
+						<button class="btn btn-success" name="submit" type="submit">LOG IN</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-</div>
+</aside>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/nifty.min.js"></script><!-- Admin Core -->
