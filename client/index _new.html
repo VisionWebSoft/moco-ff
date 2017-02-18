@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css/nifty.min.css"><!-- Admin Core -->
 <script src="js/pace.min.js"></script><!--Page load progress bar -->
 <aside id="container" class="cls-container">
-	<div class="bg-img img-balloon" id="bg-overlay" style="background-image: url(&quot;img/bg-img/bg-img-2.jpg&quot;);"></div>
+	<div class="bg-img img-balloon" id="bg-overlay"></div>
 	<header class="cls-header cls-header-lg">
 		<div class="cls-brand">
 			<a class="box-inline" href="javascript:">
@@ -15,37 +15,33 @@
 			</a>
 		</div>
 	</header>
-	<div class="cls-content login-form"><!--added class .login-form!!-->
-		<div class="cls-content-sm panel">
-			<div class="panel-body">
-				<p class="pad-btm">Sign In to your account</p>
-				<form> 
-					<div class="alert alert-danger fade in">
-						<button data-dismiss="alert" class="close"><span>×</span></button>
-						<strong>Oh snap!</strong> Please enter correct username or password.
-					</div>
-					<div class="alert alert-info fade in">
-						<button data-dismiss="alert" class="close"><span>×</span></button>
-						<strong>Logout!</strong> To continue please login here..
-					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon"><i class="fa fa-user"></i></div>
-							<input type="text" name="uname" class="form-control" placeholder="Username">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon"><i class="fa fa-asterisk"></i></div>
-							<input type="password" name="password" class="form-control" placeholder="Password">
-						</div>
-					</div>
-					<div class="col-xs-4 form-group">
-						<button class="btn btn-success" name="submit" type="submit">LOG IN</button>
-					</div>
-				</form>
+	<div class="cls-content">
+		<form class="cls-content-sm panel panel-body">
+			<p class="pad-btm">Sign In to your account</p>
+			<div class="alert alert-danger fade in">
+				<button data-dismiss="alert" class="close"><span>×</span></button>
+				<strong>Oh snap!</strong> Please enter correct username or password.
 			</div>
-		</div>
+			<div class="alert alert-info fade in">
+				<button data-dismiss="alert" class="close"><span>×</span></button>
+				<strong>Logout!</strong> To continue please login here..
+			</div>
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-addon"><i class="fa fa-user"></i></div>
+					<input type="text" name="uname" class="form-control" placeholder="Username">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-addon"><i class="fa fa-asterisk"></i></div>
+					<input type="password" name="password" class="form-control" placeholder="Password">
+				</div>
+			</div>
+			<div class="col-xs-4 form-group">
+				<button class="btn btn-success" name="submit" type="submit">LOG IN</button>
+			</div>
+		</form>
 	</div>
 </aside>
 <script src="js/jquery-2.1.1.min.js"></script>
