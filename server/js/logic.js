@@ -67,7 +67,6 @@ logic.loggedIn=function(ip)
 			delete sessions[session];
 		}
 	});
-	console.log(sessions);
 	return !!sessions[ip];//convert time to bool
 };
 logic.match=function(query,entry)//simplify!!!
