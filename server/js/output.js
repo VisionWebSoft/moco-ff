@@ -237,9 +237,17 @@ output.server=function(url,ip)
 		res.header('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept');
 		next();
 	});
+	//login redirect
+	app.use('',function(req,res,next)
+	{
+		var {path}=req;
+		path!=='/'&&path!=='/index.html'?next():
+		logic.loggedIn(req.ip)?next():
+		res.redirect('login.html');
+	});
 	//static
-	app.use('/', express.static(url+'/../client'));//static file hosting for apps
-	app.use('/', express.static(url+'/../shared'));//send shared resources
+	app.use('/',express.static(url+'/../client'));//static file hosting for apps
+	app.use('/',express.static(url+'/../shared'));//send shared resources
 	//api
 	app.all('/api/:route/',input.router);
 	//init
