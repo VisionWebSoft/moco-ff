@@ -17,28 +17,73 @@
 	<div class="cls-content">
 		<form class="cls-content-sm panel panel-body">
 			<p class="pad-btm">Sign In to your account</p>
-			<div class="alert alert-danger">
+			<div class="alert alert-danger login__msg" hidden>
 				<button data-dismiss="alert" class="close"><span>×</span></button>
-				<b>Oh snap!</b> Please enter correct username or password.
+				<b>Oh snap!</b>
+				<span class="login__msg__txt"></span>
 			</div>
 			<div class="form-group">
 				<div class="input-group">
 					<div class="input-group-addon"><i class="fa fa-user"></i></div>
-					<input type="text" name="uname" class="form-control" placeholder="Username">
+					<input type="text" name="uname" class="form-control user" placeholder="Username">
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="input-group">
 					<div class="input-group-addon"><i class="fa fa-asterisk"></i></div>
-					<input type="password" name="password" class="form-control" placeholder="Password">
+					<input type="password" name="password" class="form-control password" placeholder="Password">
 				</div>
 			</div>
 			<div class="col-xs-4 form-group">
-				<button class="btn btn-success" name="submit" type="submit">LOG IN</button>
+				<button class="btn btn-success" name="submit" onclick="login(event)">LOG IN</button>
 			</div>
 		</form>
 	</div>
 </aside>
+<script src="js/q.min.es4.js"></script>
+<script src="js/fetch-polyfill.js"></script>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/nifty.min.js"></script>
+<script>
+	'use strict';
+	function login(event)
+	{
+		event.preventDefault();
+		var target=q(event.target),
+			form=target.parent('form'),
+			password=form.q('.password').val()+'',
+			user=form.q('.user').val()+'',
+			msg=q('.login__msg').hide(),
+			msgTxt=q('.login__msg__txt'),
+			data={password,user};//iOS might not be able to handle this!!
+		if (password.length&&user.length)//optimize these vars!!
+		{
+			fetch(new Request('api/login',
+			{
+				method:'post',
+				json:true,
+				headers:new Headers({'Content-Type':'application/json'}),
+				body:JSON.stringify(data)
+			}))
+			.then(function(res)
+			{
+				return res.json();
+			})
+			.then(function(res)
+			{
+				msgTxt.html('');
+				res.auth?location.replace(location.origin)://location.href=location.origin:
+				msgTxt.html(res.error),msg.show();
+			}).catch(console.error);
+		}
+		else
+		{
+			let arr=[];
+			!user.length?arr.push('username'):'';
+			!password.length?arr.push('password.'):'';
+			msgTxt.html('Enter a '+arr.join(' and '));
+			msg.show();
+		}
+	};
+</script>
