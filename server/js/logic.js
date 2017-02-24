@@ -20,14 +20,7 @@ logic.asyncLoop=function(arr,func)
 logic.clone=obj=>JSON.parse(JSON.stringify(obj));
 logic.createSession=function(length=16)
 {
-	var arr=[];
-	for (let c=0,l=length;c<l;c++)
-	{
-		let buf=new Uint8Array(1);
-		crypto.getRandomValues(buf);
-		arr.push(buf[0]);
-	}
-	return arr.join('');
+	return Array(length).fill(0).map(_=>Math.floor(Math.random()*255)).map(num=>num.toString(16)).join('');
 };
 logic.csv2json=function(csv)//merge with setDB!!
 {
