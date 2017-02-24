@@ -47,14 +47,14 @@ output.auth=function(name,password)
 		.then(user=>user?user.password:undefined)
 		.then(function(hash)
 		{
-			if (hash)
+			if (hash)//use ternaries!!
 			{
-				bcrypt.compare(password,hash)//wrong username not tirggering...!!
-				.then((bool)=>bool?resolve(bool):reject('Wrong user name or password.')).catch(reject);
+				bcrypt.compare(password,hash)
+				.then((bool)=>bool?resolve(bool):reject('Wrong username or password.')).catch(reject);
 			}
 			else
 			{
-				reject('Wrong user name or password.');
+				reject('Wrong username or password.');
 			}
 		});
 	});
@@ -138,7 +138,6 @@ output.connect=function()
 				arr.forEach(obj=>Object.keys(obj).forEach(key=>keys[key]=true));
 				logic.setKeys(Object.keys(keys));
 				logic.setDB(arr);
-				console.log(arr.length);
 			}
 		};
 		mongoQuery('contact').then(arr=>contacts=arr).then(done).catch(error);
