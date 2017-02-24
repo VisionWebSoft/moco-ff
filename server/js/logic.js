@@ -18,6 +18,17 @@ logic.asyncLoop=function(arr,func)
 	});
 };
 logic.clone=obj=>JSON.parse(JSON.stringify(obj));
+logic.createSession=function(length=16)
+{
+	var arr=[];
+	for (let c=0,l=length;c<l;c++)
+	{
+		let buf=new Uint8Array(1);
+		crypto.getRandomValues(buf);
+		arr.push(buf[0]);
+	}
+	return arr.join('');
+};
 logic.csv2json=function(csv)//merge with setDB!!
 {
 	var arr=csv.split(/\r?\n/);
